@@ -2,7 +2,7 @@
 
 This game was ported from Adobe Flash to HTML5 by using Dart and the dartflash library.
 
-Credits to [www.funwin.com](www.funwin.com) for providing the Flash sources an the artwork.
+**Credits to [www.funwin.com](http://www.funwin.com) for providing the Flash sources an the artwork.**
 
 ---
 
