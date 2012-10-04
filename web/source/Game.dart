@@ -56,7 +56,7 @@ class Game extends Sprite
     _timeGauge.addEventListener("TimeShort", _onTimeShort);
     _timeGauge.addEventListener("TimeOver", _onTimeOver);
     addChild(_timeGauge);
-    Juggler.instance.add(_timeGauge);
+    renderJuggler.add(_timeGauge);
 
     _head = new Head();
     _head.x = 640;
@@ -129,9 +129,9 @@ class Game extends Sprite
     MessageBox messageBox  = new MessageBox(Texts.resource.getText("ESCStartText"));
     _messageLayer.addChild(messageBox);
 
-    Juggler.instance.delayCall(() => _head.nod(21), 1);
+    renderJuggler.delayCall(() => _head.nod(21), 1);
 
-    messageBox.show(() => Juggler.instance.delayCall(() => _nextLevel(), 0.5));
+    messageBox.show(() => renderJuggler.delayCall(() => _nextLevel(), 0.5));
   }
 
   //---------------------------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ class Game extends Sprite
     Tween tween1 = new Tween(_infoBox, 0.4, Transitions.easeOutCubic);
     tween1.animate("y", -90);
 
-    Juggler.instance.add(tween1);
+    renderJuggler.add(tween1);
 
     MessageBox messageBox = new MessageBox(Texts.resource.getText("ESCLevelBoxText").replaceAll("{0}", "$chainCount"));
     _messageLayer.addChild(messageBox);
@@ -217,7 +217,7 @@ class Game extends Sprite
           _head.nodStop();
         };
 
-        Juggler.instance.add(tween2);
+        renderJuggler.add(tween2);
         _introSound = null;
       }
     });
@@ -319,13 +319,13 @@ class Game extends Sprite
     levelUpAnimation.y = 260;
     _gameLayer.addChild(levelUpAnimation);
 
-    Juggler.instance.delayCall(()
+    renderJuggler.delayCall(()
     {
       _board.dropFields();
       levelUp.play();
     }, 2.0);
 
-    Juggler.instance.delayCall(()
+    renderJuggler.delayCall(()
     {
       int timePoints = (_timeGauge.restTime * 1000).toInt();
       Bonus timeBonus = new Bonus(timePoints);
@@ -341,14 +341,14 @@ class Game extends Sprite
     tween.animate("y", -210);
     tween.delay = 3.0;
 
-    Juggler.instance.add(tween);
+    renderJuggler.add(tween);
 
-    Juggler.instance.delayCall(()
+    renderJuggler.delayCall(()
     {
       _gameLayer.removeChild(levelUpAnimation);
     }, 3.5);
 
-    Juggler.instance.delayCall(()
+    renderJuggler.delayCall(()
     {
       _level++;
       _nextLevel();
@@ -379,12 +379,12 @@ class Game extends Sprite
 
       messageBox.show(()
       {
-        Juggler.instance.delayCall(() => _nextLevel(), 0.5);
+        renderJuggler.delayCall(() => _nextLevel(), 0.5);
 
         Tween tween = new Tween(_infoBox, 0.5, Transitions.easeOutCubic);
         tween.animate("y", -210);
 
-        Juggler.instance.add(tween);
+        renderJuggler.add(tween);
       });
     }
     else
@@ -399,12 +399,12 @@ class Game extends Sprite
 
       messageBox.show(()
       {
-        Juggler.instance.delayCall(() => _gameOver(), 0.5);
+        renderJuggler.delayCall(() => _gameOver(), 0.5);
 
         Tween tween = new Tween(_infoBox, 0.5, Transitions.easeOutCubic);
         tween.animate("y", -210);
 
-        Juggler.instance.add(tween);
+        renderJuggler.add(tween);
       });
     }
   }
@@ -484,16 +484,16 @@ class Game extends Sprite
     _messageLayer.addChild(gameOverBox);
 
     Sound laugh = Sounds.resource.getSound("Laugh");
-    Juggler.instance.delayCall(() => laugh.play(), 0.3);
+    renderJuggler.delayCall(() => laugh.play(), 0.3);
 
     Tween tween = new Tween(gameOverBox, 0.3, Transitions.easeOutCubic);
     tween.animate("y", 150);
 
-    Juggler.instance.add(tween);
+    renderJuggler.add(tween);
 
     //----------------------------------------------
 
-    Juggler.instance.delayCall(() => _exitGame(true), 5.0);
+    renderJuggler.delayCall(() => _exitGame(true), 5.0);
 
     gameOverBox.addEventListener(MouseEvent.CLICK, (MouseEvent me) => _exitGame(true));
   }

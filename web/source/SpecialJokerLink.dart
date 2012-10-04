@@ -16,8 +16,8 @@ class SpecialJokerLink extends Sprite implements Animatable
      _bitmap.y = -25;
     addChild(_bitmap);
 
-    addEventListener(Event.ADDED_TO_STAGE, (e) => Juggler.instance.add(this));
-    addEventListener(Event.REMOVED_FROM_STAGE, (e) => Juggler.instance.remove(this));
+    addEventListener(Event.ADDED_TO_STAGE, (e) => renderJuggler.add(this));
+    addEventListener(Event.REMOVED_FROM_STAGE, (e) => renderJuggler.remove(this));
   }
 
   //------------------------------------------------

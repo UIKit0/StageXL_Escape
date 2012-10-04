@@ -26,7 +26,7 @@ class Alarm extends Sprite
   {
     _warningChannel = _warning.play();
 
-    Juggler.instance.remove(_tween);
+    renderJuggler.remove(_tween);
 
     _tween = new Tween(this, 9.0, Transitions.linear);
     _tween.animateValue((value)
@@ -39,7 +39,7 @@ class Alarm extends Sprite
          _alarmBitmap.bitmapData = _alarmBitmapDatas[8 - frame];
     }, 0, 80);
 
-    Juggler.instance.add(_tween);
+    renderJuggler.add(_tween);
   }
 
   void stop()
@@ -50,7 +50,7 @@ class Alarm extends Sprite
       _warningChannel = null;
     }
 
-    Juggler.instance.remove(_tween);
+    renderJuggler.remove(_tween);
     _alarmBitmap.bitmapData = _alarmBitmapDatas[0];
   }
 

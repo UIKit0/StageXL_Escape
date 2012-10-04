@@ -30,6 +30,7 @@ part 'source/TimeGauge.dart';
 Stage stageBackground;
 Stage stageForeground;
 RenderLoop renderLoop;
+Juggler renderJuggler;
 
 Bitmap loadingBitmap;
 Tween loadingBitmapTween;
@@ -43,6 +44,8 @@ void main()
   renderLoop = new RenderLoop();
   renderLoop.addStage(stageBackground);
   renderLoop.addStage(stageForeground);
+
+  renderJuggler = renderLoop.juggler;
 
   //-------------------------------------------
 
@@ -59,7 +62,7 @@ void main()
 
     loadingBitmapTween = new Tween(loadingBitmap, 100, Transitions.linear);
     loadingBitmapTween.animate("rotation", 100.0 * 2.0 * PI);
-    Juggler.instance.add(loadingBitmapTween);
+    renderJuggler.add(loadingBitmapTween);
 
     loadingTextField = new TextField();
     loadingTextField.defaultTextFormat = new TextFormat("Arial", 20, 0xA0A0A0, bold:true);;
@@ -136,7 +139,7 @@ void loadGame()
   {
     stageForeground.removeChild(loadingBitmap);
     stageForeground.removeChild(loadingTextField);
-    Juggler.instance.remove(loadingBitmapTween);
+    renderJuggler.remove(loadingBitmapTween);
 
     //------------------------------
 

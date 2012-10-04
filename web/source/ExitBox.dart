@@ -57,8 +57,8 @@ class ExitBox extends Sprite
 
     //---------------------
 
-    this.addEventListener(Event.ADDED_TO_STAGE, (e) => Juggler.instance.add(_timeGauge));
-    this.addEventListener(Event.REMOVED_FROM_STAGE, (e) => Juggler.instance.remove(_timeGauge));
+    this.addEventListener(Event.ADDED_TO_STAGE, (e) => renderJuggler.add(_timeGauge));
+    this.addEventListener(Event.REMOVED_FROM_STAGE, (e) => renderJuggler.remove(_timeGauge));
   }
 
   //-----------------------------------------------------------------------------------

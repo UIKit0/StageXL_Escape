@@ -24,7 +24,7 @@ class Head extends Sprite
 
   void nod(int count)
   {
-    Juggler.instance.remove(_nodTween);
+    renderJuggler.remove(_nodTween);
 
     _nodTween = new Tween(this, 0.5 * count, Transitions.linear);
 
@@ -33,12 +33,12 @@ class Head extends Sprite
       _headBitmap.y = sin(value * 2 * PI) * 3 - _headBitmap.height / 2;
     }, 0, count);
 
-    Juggler.instance.add(_nodTween);
+    renderJuggler.add(_nodTween);
   }
 
   void nodStop()
   {
-    Juggler.instance.remove(_nodTween);
+    renderJuggler.remove(_nodTween);
     _headBitmap.bitmapData = _headBitmapDatas[0];
   }
 

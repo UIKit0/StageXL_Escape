@@ -44,9 +44,9 @@ class Lock extends Sprite
     tween3.animate("alpha", 1);
     tween3.delay = 2.2;
 
-    Juggler.instance.add(tween1);
-    Juggler.instance.add(tween2);
-    Juggler.instance.add(tween3);
+    renderJuggler.add(tween1);
+    renderJuggler.add(tween2);
+    renderJuggler.add(tween3);
   }
 
 }

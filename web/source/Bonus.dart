@@ -35,7 +35,7 @@ class Bonus extends Sprite
 
     tween.onComplete = () => this.removeFromParent();
 
-    Juggler.instance.add(tween);
+    renderJuggler.add(tween);
   }
 
 }

@@ -101,7 +101,7 @@ class Board extends Sprite
           }
         };
 
-        Juggler.instance.add(tween);
+        renderJuggler.add(tween);
       }
     }
 
@@ -151,7 +151,7 @@ class Board extends Sprite
         //tween.animate("x", -500 + x * 50);
         //tween.delay = y * 0.1;
 
-        Juggler.instance.add(tween);
+        renderJuggler.add(tween);
       }
     }
   }
@@ -398,7 +398,7 @@ class Board extends Sprite
           }
         };
 
-        Juggler.instance.add(tween);
+        renderJuggler.add(tween);
       }
     }
 
@@ -462,7 +462,7 @@ class Board extends Sprite
       int px = x + l * dx;
       int py = y + l * dy;
 
-      Juggler.instance.delayCall(()
+      renderJuggler.delayCall(()
       {
         field.empty = true;
         field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
@@ -474,7 +474,7 @@ class Board extends Sprite
         explosion.x = px * 50;
         explosion.y = py * 50;
 
-        Juggler.instance.add(explosion);
+        renderJuggler.add(explosion);
         _explosionLayer.addChild(explosion);
 
         processSpecial(field);
@@ -568,8 +568,8 @@ class Board extends Sprite
       tween.animate("y" , lock.y - 10);
       tween.onComplete = () => removeChild(special);
 
-      Juggler.instance.add(tween);
-      Juggler.instance.delayCall(() => openLock(lockNumber), 0.5);
+      renderJuggler.add(tween);
+      renderJuggler.delayCall(() => openLock(lockNumber), 0.5);
     }
   }
 
@@ -612,10 +612,10 @@ class Board extends Sprite
       for(int i = 0; i < _locks.length; i++)
       {
         _locks[i].locked = true;
-        Juggler.instance.delayCall(() => _locks[(i + lockNumber) % _locks.length].showHappy(), i * 0.2);
+        renderJuggler.delayCall(() => _locks[(i + lockNumber) % _locks.length].showHappy(), i * 0.2);
       }
 
-      Juggler.instance.delayCall(() => dispatchEvent(new BoardEvent(BoardEvent.Unlocked, { "Type" : "All", "Position" : new Point(280, 550) })), 0.75);
+      renderJuggler.delayCall(() => dispatchEvent(new BoardEvent(BoardEvent.Unlocked, { "Type" : "All", "Position" : new Point(280, 550) })), 0.75);
     }
   }
 
@@ -703,7 +703,7 @@ class Board extends Sprite
             }
           };
 
-          Juggler.instance.add(tween);
+          renderJuggler.add(tween);
         }
       }
     }

@@ -80,8 +80,8 @@ class Grafix
       tween2.animate("scaleY", 0.0);
       tween2.delay = 3.0;
 
-      Juggler.instance.add(tween1);
-      Juggler.instance.add(tween2);
+      renderJuggler.add(tween1);
+      renderJuggler.add(tween2);
 
       offset = offset + 5 + bitmap.width;
     }
