@@ -275,7 +275,7 @@ class Board extends Sprite
   {
     for(int retry = 0; retry < 20; retry++)
     {
-      int range = (_levelChains / maximum).toInt();
+      int range = _levelChains ~/ maximum;
       int index = current * range + _random.nextInt(range);
 
       if (_queue[index].special == Special.None)
