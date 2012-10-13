@@ -188,10 +188,10 @@ class Game extends Sprite
     _infoBox.chains = chainCount;
     _infoBox.y = -210;
 
-    Tween tween1 = new Tween(_infoBox, 0.4, Transitions.easeOutCubic);
-    tween1.animate("y", -90);
+    Tween tween = new Tween(_infoBox, 0.4, Transitions.easeOutCubic);
+    tween.animate("y", -90);
 
-    renderJuggler.add(tween1);
+    renderJuggler.add(tween);
 
     MessageBox messageBox = new MessageBox(Texts.resource.getText("ESCLevelBoxText").replaceAll("{0}", "$chainCount"));
     _messageLayer.addChild(messageBox);
@@ -203,21 +203,19 @@ class Game extends Sprite
 
       if (_introSound != null)
       {
-        Tween tween2 = new Tween(null, 4.0, Transitions.linear);
+        Transition transition = new Transition(1.0, 0.0, 4.0, Transitions.linear);
 
-        tween2.animateValue((volume)
-        {
+        transition.onUpdate = (volume) {
           _introSoundChannel.soundTransform.volume = volume;
           _introSoundChannel.soundTransform = _introSoundChannel.soundTransform;
-        }, 1.0, 0.0);
+        };
 
-        tween2.onComplete = ()
-        {
+        transition.onComplete = () {
           _introSoundChannel.stop();
           _head.nodStop();
         };
 
-        renderJuggler.add(tween2);
+        renderJuggler.add(transition);
         _introSound = null;
       }
     });

@@ -5,7 +5,7 @@ class Alarm extends Sprite
 
   Sound _warning;
   SoundChannel _warningChannel;
-  Tween _tween;
+  Transition _transition;
 
   //--------------------------------------------------------------------------------------------
 
@@ -26,20 +26,16 @@ class Alarm extends Sprite
   {
     _warningChannel = _warning.play();
 
-    renderJuggler.remove(_tween);
+    renderJuggler.remove(_transition);
 
-    _tween = new Tween(this, 9.0, Transitions.linear);
-    _tween.animateValue((value)
-    {
+    _transition = new Transition(0, 80, 9.0, Transitions.linear);
+
+    _transition.onUpdate = (value) {
       int frame = value.toInt() % 8;
+      _alarmBitmap.bitmapData = _alarmBitmapDatas[(frame <= 4) ? frame + 1 : 8 - frame];
+    };
 
-      if (frame <= 4)
-         _alarmBitmap.bitmapData = _alarmBitmapDatas[frame + 1];
-        else
-         _alarmBitmap.bitmapData = _alarmBitmapDatas[8 - frame];
-    }, 0, 80);
-
-    renderJuggler.add(_tween);
+    renderJuggler.add(_transition);
   }
 
   void stop()
@@ -50,9 +46,8 @@ class Alarm extends Sprite
       _warningChannel = null;
     }
 
-    renderJuggler.remove(_tween);
+    renderJuggler.remove(_transition);
     _alarmBitmap.bitmapData = _alarmBitmapDatas[0];
   }
-
 
 }

@@ -3,7 +3,7 @@ class Head extends Sprite
   List<BitmapData> _headBitmapDatas;
   Bitmap _headBitmap;
 
-  Tween _nodTween;
+  Transition _nodTransition;
 
   //--------------------------------------------------------------------------------------------
 
@@ -17,28 +17,29 @@ class Head extends Sprite
 
     addChild(_headBitmap);
 
-    _nodTween = null;
+    _nodTransition = null;
   }
 
   //--------------------------------------------------------------------------------------------
 
   void nod(int count)
   {
-    renderJuggler.remove(_nodTween);
+    renderJuggler.remove(_nodTransition);
 
-    _nodTween = new Tween(this, 0.5 * count, Transitions.linear);
+    _nodTransition = new Transition(0, count, 0.5 * count, Transitions.linear);
 
-    _nodTween.animateValue((value) {
-      _headBitmap.bitmapData = _headBitmapDatas[((value * _headBitmapDatas.length) % _headBitmapDatas.length).toInt()];
+    _nodTransition.onUpdate = (value) {
+      int frame = ((value * _headBitmapDatas.length) % _headBitmapDatas.length).toInt();
+      _headBitmap.bitmapData = _headBitmapDatas[frame];
       _headBitmap.y = sin(value * 2 * PI) * 3 - _headBitmap.height / 2;
-    }, 0, count);
+    };
 
-    renderJuggler.add(_nodTween);
+    renderJuggler.add(_nodTransition);
   }
 
   void nodStop()
   {
-    renderJuggler.remove(_nodTween);
+    renderJuggler.remove(_nodTransition);
     _headBitmap.bitmapData = _headBitmapDatas[0];
   }
 

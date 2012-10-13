@@ -24,18 +24,20 @@ class Bonus extends Sprite
 
     //-------------------------------------------------
 
-    Tween tween = new Tween(this, 1.5, Transitions.easeOutCubic);
-    tween.animateValue((value)
-    {
+    Transition transition = new Transition(0.0, 1.0, 1.5, Transitions.easeOutCubic);
+
+    transition.onUpdate = (value) {
       _textFieldContainer.alpha = 1 - value;
       _textFieldContainer.y = - value * 50;
       _textFieldContainer.scaleX = 1.0 + 0.1 * sin(value * 10);
       _textFieldContainer.scaleY = 1.0 + 0.1 * cos(value * 10);
-    }, 0.0, 1.0);
+    };
 
-    tween.onComplete = () => this.removeFromParent();
+    transition.onComplete = () {
+      this.removeFromParent();
+    };
 
-    renderJuggler.add(tween);
+    renderJuggler.add(transition);
   }
 
 }

@@ -87,13 +87,15 @@ class Board extends Sprite
         field.y = y * 50 + 25 - 550;
         field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
 
-        Tween tween = new Tween(field, 0.4, Transitions.easeOutCubic);
-        tween.animate("y", y * 50 + 25);
-        tween.delay = x * 0.03;
-        tween.onComplete = ()
-        {
-          if (completeCounter.increment() == 100)
-          {
+        Transition transition = new Transition(field.y, y * 50 + 25, 0.4, Transitions.easeOutCubic);
+        transition.delay = x * 0.03;
+
+        transition.onUpdate = (value) {
+          field.y = value;
+        };
+
+        transition.onComplete = () {
+          if (completeCounter.increment() == 100) {
             _updateLinks();
             _animationRunning = false;
             _mouseBuffer.clear();
@@ -101,7 +103,7 @@ class Board extends Sprite
           }
         };
 
-        renderJuggler.add(tween);
+        renderJuggler.add(transition);
       }
     }
 
@@ -137,21 +139,21 @@ class Board extends Sprite
     {
       for(int x = 0; x < 10; x++)
       {
-       Field field = _fields[x + y * 10];
+        Field field = _fields[x + y * 10];
 
         field.linked = false;
         field.linkedJoker = false;
         field.special = Special.None;
         field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
 
-        Tween tween = new Tween(field, 0.5, Transitions.easeOutCubic);
-        tween.animate("y", 500 + y *50 + 25);
-        tween.delay = x * 0.1;
+        Transition transition = new Transition(field.y, 500 + y * 50 + 25, 0.5, Transitions.easeOutCubic);
+        transition.delay = x * 0.1;
 
-        //tween.animate("x", -500 + x * 50);
-        //tween.delay = y * 0.1;
+        transition.onUpdate = (value) {
+          field.y = value;
+        };
 
-        renderJuggler.add(tween);
+        renderJuggler.add(transition);
       }
     }
   }
@@ -374,31 +376,29 @@ class Board extends Sprite
     {
       for(int y = 0; y < 10; y++)
       {
-        num delay = x * 0.06;
-
         Field field = _fields[x + y * 10];
         field.sinScale = 0.0;
 
-        Tween tween = new Tween(field, 0.2, Transitions.linear);
-        tween.animateValue((v) => field.sinScale = v, 0.0, 1.0);
-        tween.delay = delay;
+        Transition transition = new Transition(0.0, 1.0, 0.2, Transitions.linear);
+        transition.delay = x * 0.06;
 
-        tween.onStart = ()
-        {
+        transition.onUpdate = (value) {
+          field.sinScale = value;
+        };
+
+        transition.onStart = () {
           field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
         };
 
-        tween.onComplete = ()
-        {
-          if (completeCounter.increment() == 100)
-          {
+        transition.onComplete = () {
+          if (completeCounter.increment() == 100) {
             _updateLinks();
             _processCombinations();
             _mouseBuffer.clear();
           }
         };
 
-        renderJuggler.add(tween);
+        renderJuggler.add(transition);
       }
     }
 
@@ -623,8 +623,6 @@ class Board extends Sprite
 
   void _fillEmptyFields()
   {
-    Field fieldTarget, fieldSource, fieldSourceWest;
-
     ValueCounter animationCounter = new ValueCounter();
 
     for(int x = 0; x < 10; x++)
@@ -647,6 +645,8 @@ class Board extends Sprite
 
         if (target >= 0)
         {
+          Field fieldTarget, fieldSource, fieldSourceWest;
+
           if (source >= 0)
           {
             fieldSource = _fields[x + source * 10];
@@ -691,19 +691,21 @@ class Board extends Sprite
 
           animationCounter.increment();
 
-          Tween tween = new Tween(fieldTarget, 0.1, Transitions.linear);
-          tween.animate("y", 50 * target + 25);
-          tween.onComplete = ()
-          {
-            if (animationCounter.decrement() == 0)
-            {
+          Transition transition = new Transition(fieldTarget.y, 50 * target + 25, 0.1, Transitions.linear);
+
+          transition.onUpdate = (value) {
+            fieldTarget.y = value;
+          };
+
+          transition.onComplete = () {
+            if (animationCounter.decrement() == 0) {
               _updateLinks();
               _processCombinations();
               _checkMouseBuffer();
             }
           };
 
-          renderJuggler.add(tween);
+          renderJuggler.add(transition);
         }
       }
     }
