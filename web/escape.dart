@@ -23,6 +23,7 @@ part 'source/SpecialJokerLink.dart';
 part 'source/SpecialWobble.dart';
 part 'source/Texts.dart';
 part 'source/ValueCounter.dart';
+part 'source/Transition.dart';
 
 part 'source/Gauge.dart';
 part 'source/TimeGauge.dart';
