@@ -25,9 +25,6 @@ part 'source/Texts.dart';
 part 'source/ValueCounter.dart';
 part 'source/Transition.dart';
 
-part 'source/Gauge.dart';
-part 'source/TimeGauge.dart';
-
 Stage stageBackground;
 Stage stageForeground;
 RenderLoop renderLoop;
