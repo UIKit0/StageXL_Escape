@@ -1,3 +1,5 @@
+part of escape;
+
 class Game extends Sprite
 {
   InfoBox _infoBox;

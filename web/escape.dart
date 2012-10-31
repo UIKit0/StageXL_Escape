@@ -1,3 +1,5 @@
+library escape;
+
 import 'dart:html' as html;
 import 'dart:math';
 import 'package:dartflash/dartflash.dart';

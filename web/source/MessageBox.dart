@@ -1,3 +1,5 @@
+part of escape;
+
 class MessageBox extends Sprite
 {
   DelayedCall _showTimeout;

@@ -1,3 +1,5 @@
+part of escape;
+
 class ExitBox extends Sprite
 {
   TimeGauge _timeGauge;

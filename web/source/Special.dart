@@ -1,3 +1,5 @@
+part of escape;
+
 class Special
 {
   static const String None = "None";

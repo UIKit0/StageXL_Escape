@@ -1,3 +1,5 @@
+part of escape;
+
 class Head extends Sprite
 {
   List<BitmapData> _headBitmapDatas;

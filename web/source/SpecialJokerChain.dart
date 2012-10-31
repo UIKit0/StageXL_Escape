@@ -1,3 +1,5 @@
+part of escape;
+
 class SpecialJokerChain extends Sprite implements Animatable
 {
   Bitmap _bitmap;

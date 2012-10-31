@@ -1,3 +1,5 @@
+part of escape;
+
 class Alarm extends Sprite
 {
   List<BitmapData> _alarmBitmapDatas;

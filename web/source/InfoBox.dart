@@ -1,3 +1,5 @@
+part of escape;
+
 class InfoBox extends Sprite
 {
   int _level;

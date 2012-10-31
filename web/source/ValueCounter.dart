@@ -1,3 +1,5 @@
+part of escape;
+
 class ValueCounter
 {
   int value = 0;

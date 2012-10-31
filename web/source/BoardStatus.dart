@@ -1,3 +1,5 @@
+part of escape;
+
 class BoardStatus
 {
   static const int Playing = 1;

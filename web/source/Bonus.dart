@@ -1,3 +1,5 @@
+part of escape;
+
 class Bonus extends Sprite
 {
   Sprite _textFieldContainer;

@@ -1,3 +1,5 @@
+part of escape;
+
 class Lock extends Sprite
 {
   int _color;

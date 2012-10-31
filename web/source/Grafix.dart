@@ -1,3 +1,5 @@
+part of escape;
+
 class Grafix
 {
   static Resource resource;

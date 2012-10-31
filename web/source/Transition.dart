@@ -1,3 +1,5 @@
+part of escape;
+
 class Transition implements Animatable
 {
   TransitionFunction _transitionFunction;

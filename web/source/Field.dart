@@ -1,3 +1,5 @@
+part of escape;
+
 class Field
 {
   int _color;

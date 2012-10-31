@@ -1,3 +1,5 @@
+part of escape;
+
 class BoardEvent extends Event
 {
   static const String Explosion = "Explosion";
