@@ -4,6 +4,6 @@ dependencies:
   dartflash:
     git:
       url: https://github.com/bp74/dartflash.git
-      ref: master
+      ref: latest
 
 

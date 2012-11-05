@@ -25,7 +25,6 @@ part 'source/SpecialJokerLink.dart';
 part 'source/SpecialWobble.dart';
 part 'source/Texts.dart';
 part 'source/ValueCounter.dart';
-part 'source/Transition.dart';
 
 Stage stageBackground;
 Stage stageForeground;
