@@ -26,7 +26,7 @@ class Bonus extends Sprite
 
     //-------------------------------------------------
 
-    Transition transition = new Transition(0.0, 1.0, 1.5, Transitions.easeOutCubic);
+    Transition transition = new Transition(0.0, 1.0, 1.5, TransitionType.easeOutCubic);
 
     transition.onUpdate = (value) {
       _textFieldContainer.alpha = 1 - value;

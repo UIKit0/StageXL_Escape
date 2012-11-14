@@ -190,7 +190,7 @@ class Game extends Sprite
     _infoBox.chains = chainCount;
     _infoBox.y = -210;
 
-    Tween tween = new Tween(_infoBox, 0.4, Transitions.easeOutCubic);
+    Tween tween = new Tween(_infoBox, 0.4, TransitionType.easeOutCubic);
     tween.animate("y", -90);
 
     renderJuggler.add(tween);
@@ -205,7 +205,7 @@ class Game extends Sprite
 
       if (_introSound != null)
       {
-        Transition transition = new Transition(1.0, 0.0, 4.0, Transitions.linear);
+        Transition transition = new Transition(1.0, 0.0, 4.0, TransitionType.linear);
 
         transition.onUpdate = (volume) {
           _introSoundChannel.soundTransform.volume = volume;
@@ -337,7 +337,7 @@ class Game extends Sprite
       _pointsTextField.text = "$_points";
     }, 2.5);
 
-    Tween tween = new Tween(_infoBox, 0.5, Transitions.easeOutCubic);
+    Tween tween = new Tween(_infoBox, 0.5, TransitionType.easeOutCubic);
     tween.animate("y", -210);
     tween.delay = 3.0;
 
@@ -381,7 +381,7 @@ class Game extends Sprite
       {
         renderJuggler.delayCall(() => _nextLevel(), 0.5);
 
-        Tween tween = new Tween(_infoBox, 0.5, Transitions.easeOutCubic);
+        Tween tween = new Tween(_infoBox, 0.5, TransitionType.easeOutCubic);
         tween.animate("y", -210);
 
         renderJuggler.add(tween);
@@ -401,7 +401,7 @@ class Game extends Sprite
       {
         renderJuggler.delayCall(() => _gameOver(), 0.5);
 
-        Tween tween = new Tween(_infoBox, 0.5, Transitions.easeOutCubic);
+        Tween tween = new Tween(_infoBox, 0.5, TransitionType.easeOutCubic);
         tween.animate("y", -210);
 
         renderJuggler.add(tween);
@@ -486,7 +486,7 @@ class Game extends Sprite
     Sound laugh = Sounds.resource.getSound("Laugh");
     renderJuggler.delayCall(() => laugh.play(), 0.3);
 
-    Tween tween = new Tween(gameOverBox, 0.3, Transitions.easeOutCubic);
+    Tween tween = new Tween(gameOverBox, 0.3, TransitionType.easeOutCubic);
     tween.animate("y", 150);
 
     renderJuggler.add(tween);

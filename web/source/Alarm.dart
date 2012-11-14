@@ -30,7 +30,7 @@ class Alarm extends Sprite
 
     renderJuggler.remove(_transition);
 
-    _transition = new Transition(0, 80, 9.0, Transitions.linear);
+    _transition = new Transition(0, 80, 9.0, TransitionType.linear);
 
     _transition.onUpdate = (value) {
       int frame = value.toInt() % 8;

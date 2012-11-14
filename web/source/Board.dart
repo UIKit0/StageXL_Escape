@@ -89,7 +89,7 @@ class Board extends Sprite
         field.y = y * 50 + 25 - 550;
         field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
 
-        Transition transition = new Transition(field.y, y * 50 + 25, 0.4, Transitions.easeOutCubic);
+        Transition transition = new Transition(field.y, y * 50 + 25, 0.4, TransitionType.easeOutCubic);
         transition.delay = x * 0.03;
 
         transition.onUpdate = (value) {
@@ -148,7 +148,7 @@ class Board extends Sprite
         field.special = Special.None;
         field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
 
-        Transition transition = new Transition(field.y, 500 + y * 50 + 25, 0.5, Transitions.easeOutCubic);
+        Transition transition = new Transition(field.y, 500 + y * 50 + 25, 0.5, TransitionType.easeOutCubic);
         transition.delay = x * 0.1;
 
         transition.onUpdate = (value) {
@@ -381,7 +381,7 @@ class Board extends Sprite
         Field field = _fields[x + y * 10];
         field.sinScale = 0.0;
 
-        Transition transition = new Transition(0.0, 1.0, 0.2, Transitions.linear);
+        Transition transition = new Transition(0.0, 1.0, 0.2, TransitionType.linear);
         transition.delay = x * 0.06;
 
         transition.onUpdate = (value) {
@@ -565,7 +565,7 @@ class Board extends Sprite
       special.y = field.y;
       addChild(special);
 
-      Tween tween = new Tween(special, 0.5, Transitions.easeOutCubic);
+      Tween tween = new Tween(special, 0.5, TransitionType.easeOutCubic);
       tween.animate("x" , lock.x);
       tween.animate("y" , lock.y - 10);
       tween.onComplete = () => removeChild(special);
@@ -693,7 +693,7 @@ class Board extends Sprite
 
           animationCounter.increment();
 
-          Transition transition = new Transition(fieldTarget.y, 50 * target + 25, 0.1, Transitions.linear);
+          Transition transition = new Transition(fieldTarget.y, 50 * target + 25, 0.1, TransitionType.linear);
 
           transition.onUpdate = (value) {
             fieldTarget.y = value;

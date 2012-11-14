@@ -28,7 +28,7 @@ class Head extends Sprite
   {
     renderJuggler.remove(_nodTransition);
 
-    _nodTransition = new Transition(0, count, 0.5 * count, Transitions.linear);
+    _nodTransition = new Transition(0, count, 0.5 * count, TransitionType.linear);
 
     _nodTransition.onUpdate = (value) {
       int frame = ((value * _headBitmapDatas.length) % _headBitmapDatas.length).toInt();
