@@ -292,7 +292,7 @@ class Game extends Sprite
       case 3: chainPoints = 1000; break;
       case 4: chainPoints = 2000; break;
       case 5: chainPoints = 5000; break;
-      default: chainPoints = 5000;
+      default: chainPoints = 5000; break;
     }
 
     _points = _points + chainPoints * chainFactor;
