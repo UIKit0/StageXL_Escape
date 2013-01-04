@@ -59,7 +59,7 @@ void main()
     loadingBitmap.y = 270;
     stageForeground.addChild(loadingBitmap);
 
-    loadingBitmapTween = new Tween(loadingBitmap, 100, TransitionType.linear);
+    loadingBitmapTween = new Tween(loadingBitmap, 100, TransitionFunction.linear);
     loadingBitmapTween.animate("rotation", 100.0 * 2.0 * PI);
     renderJuggler.add(loadingBitmapTween);
 

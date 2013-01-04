@@ -34,17 +34,17 @@ class Lock extends Sprite
 
   void showHappy()
   {
-    Transition transition = new Transition(0.0, 1.0, 2.0, TransitionType.easeOutCubic);
+    Transition transition = new Transition(0.0, 1.0, 2.0, TransitionFunction.easeOutCubic);
     transition.onUpdate = (value) {
       scaleX = scaleY = 1.0 + 0.2 * sin(value * 4 * PI);
     };
 
-    Tween tween1 = new Tween(this, 0.2, TransitionType.easeOutCubic);
+    Tween tween1 = new Tween(this, 0.2, TransitionFunction.easeOutCubic);
     tween1.animate("alpha", 0.0);
     tween1.delay = 2.0;
     tween1.onComplete = () => showLocked(_locked);
 
-    Tween tween2 = new Tween(this, 0.2, TransitionType.easeInCubic);
+    Tween tween2 = new Tween(this, 0.2, TransitionFunction.easeInCubic);
     tween2.animate("alpha", 1);
     tween2.delay = 2.2;
 
