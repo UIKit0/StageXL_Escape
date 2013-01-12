@@ -1,9 +1,10 @@
-name: dartflash-escape
+name: dartflash_escape
+author: Bernhard Pichler
 description: This game was ported from Adobe Flash to HTML5 by using Dart and the dartflash library.
+homepage: http://www.dartflash.com/games/escape/escape.html
 dependencies:
   dartflash:
     git:
-      url: https://github.com/bp74/dartflash.git
       ref: latest
-
-
+      url: https://github.com/bp74/dartflash.git
+  browser: any
