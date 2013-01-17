@@ -1,7 +1,8 @@
 library escape;
 
-import 'dart:html' as html;
+import 'dart:async';
 import 'dart:math';
+import 'dart:html' as html;
 import 'package:dartflash/dartflash.dart';
 
 part 'source/Alarm.dart';
