@@ -29,8 +29,8 @@ class Game extends Sprite
 
   Game()
   {
-    Bitmap shuffleButtonNormal = new Bitmap(Grafix.resource.getBitmapData("ShuffleButtonNormal"));
-    Bitmap shuffleButtonPressed = new Bitmap(Grafix.resource.getBitmapData("ShuffleButtonPressed"));
+    Bitmap shuffleButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ShuffleButtonNormal"));
+    Bitmap shuffleButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ShuffleButtonPressed"));
 
     _shuffleButton = new SimpleButton(shuffleButtonNormal, shuffleButtonNormal, shuffleButtonPressed, shuffleButtonPressed);
     _shuffleButton.addEventListener(MouseEvent.CLICK, _onShuffleButtonClick);
@@ -38,8 +38,8 @@ class Game extends Sprite
     _shuffleButton.y = 525;
     addChild(_shuffleButton);
 
-    Bitmap exitButtonNormal = new Bitmap(Grafix.resource.getBitmapData("ExitButtonNormal"));
-    Bitmap exitButtonPressed = new Bitmap(Grafix.resource.getBitmapData("ExitButtonPressed"));
+    Bitmap exitButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ExitButtonNormal"));
+    Bitmap exitButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ExitButtonPressed"));
 
     _exitButton = new SimpleButton(exitButtonNormal, exitButtonNormal, exitButtonPressed, exitButtonPressed);
     _exitButton.addEventListener(MouseEvent.CLICK, _onExitButtonClick);
@@ -52,7 +52,7 @@ class Game extends Sprite
     _infoBox.y = -1000;
     addChild(_infoBox);
 
-    _timeGauge = new TimeGauge(10, Grafix.resource.getBitmapData("TimeGauge"), Gauge.DIRECTION_UP);
+    _timeGauge = new TimeGauge(10, Grafix.resourceManager.getBitmapData("TimeGauge"), Gauge.DIRECTION_UP);
     _timeGauge.x = 659;
     _timeGauge.y = 244;
     _timeGauge.addEventListener("TimeShort", _onTimeShort);
@@ -113,7 +113,7 @@ class Game extends Sprite
 
     //-------------------------------
 
-    _introSound = Sounds.resource.getSound("Intro");
+    _introSound = Sounds.resourceManager.getSound("Intro");
     _introSoundChannel = _introSound.play();
 
   }
@@ -128,7 +128,7 @@ class Game extends Sprite
     _points = 0;
     _shuffles = 3;
 
-    MessageBox messageBox  = new MessageBox(Texts.resource.getText("ESCStartText"));
+    MessageBox messageBox  = new MessageBox(Texts.resourceManager.getText("ESCStartText"));
     _messageLayer.addChild(messageBox);
 
     renderJuggler.delayCall(() => _head.nod(21), 1);
@@ -195,7 +195,7 @@ class Game extends Sprite
 
     renderJuggler.add(tween);
 
-    MessageBox messageBox = new MessageBox(Texts.resource.getText("ESCLevelBoxText").replaceAll("{0}", "$chainCount"));
+    MessageBox messageBox = new MessageBox(Texts.resourceManager.getText("ESCLevelBoxText").replaceAll("{0}", "$chainCount"));
     _messageLayer.addChild(messageBox);
 
     messageBox.show(()
@@ -308,8 +308,8 @@ class Game extends Sprite
     _timeGauge.pause();
     _alarm.stop();
 
-    Sound laugh = Sounds.resource.getSound("Laugh");
-    Sound levelUp = Sounds.resource.getSound("LevelUp");
+    Sound laugh = Sounds.resourceManager.getSound("Laugh");
+    Sound levelUp = Sounds.resourceManager.getSound("LevelUp");
 
     laugh.play();
     _head.nod(3);
@@ -371,10 +371,10 @@ class Game extends Sprite
 
       _lives--;
 
-      messageBox = new MessageBox(Texts.resource.getText("GEN2ndchancetime"));
+      messageBox = new MessageBox(Texts.resourceManager.getText("GEN2ndchancetime"));
       _messageLayer.addChild(messageBox);
 
-      sound = Sounds.resource.getSound("LevelUp");
+      sound = Sounds.resourceManager.getSound("LevelUp");
       sound.play();
 
       messageBox.show(()
@@ -391,10 +391,10 @@ class Game extends Sprite
     {
       // _logger.info("onBoardEventTimeouted (GameOver)");
 
-      messageBox = new MessageBox(Texts.resource.getText("GENtimeup"));
+      messageBox = new MessageBox(Texts.resourceManager.getText("GENtimeup"));
       _messageLayer.addChild(messageBox);
 
-      sound = Sounds.resource.getSound("GameOver");
+      sound = Sounds.resourceManager.getSound("GameOver");
       sound.play();
 
       messageBox.show(()
@@ -463,7 +463,7 @@ class Game extends Sprite
   {
     Sprite gameOverBox = new Sprite();
 
-    Bitmap background = new Bitmap(Grafix.resource.getBitmapData("ExitBox"));
+    Bitmap background = new Bitmap(Grafix.resourceManager.getBitmapData("ExitBox"));
     gameOverBox.addChild(background);
 
     TextField textField = new TextField();
@@ -472,7 +472,7 @@ class Game extends Sprite
     textField.height = 200;
     textField.wordWrap = true;
     //textField.selectable = false;
-    textField.text = Texts.resource.getText("GENgameover");
+    textField.text = Texts.resourceManager.getText("GENgameover");
     textField.x = 47;
     textField.y = 30 + (textField.height - textField.textHeight)/2;
     //textField.filters = [new GlowFilter(0x000000, 0.7, 3, 3)];
@@ -483,7 +483,7 @@ class Game extends Sprite
     gameOverBox.y = -gameOverBox.height;
     _messageLayer.addChild(gameOverBox);
 
-    Sound laugh = Sounds.resource.getSound("Laugh");
+    Sound laugh = Sounds.resourceManager.getSound("Laugh");
     renderJuggler.delayCall(() => laugh.play(), 0.3);
 
     Tween tween = new Tween(gameOverBox, 0.3, TransitionFunction.easeOutCubic);

@@ -10,7 +10,7 @@ class ExitBox extends Sprite
 
   ExitBox()
   {
-    Bitmap background = new Bitmap(Grafix.resource.getBitmapData("ExitBox"));
+    Bitmap background = new Bitmap(Grafix.resourceManager.getBitmapData("ExitBox"));
     addChild(background);
 
     TextField textField = new TextField();
@@ -19,7 +19,7 @@ class ExitBox extends Sprite
     textField.height = 100;
     textField.wordWrap = true;
     //textField.selectable = false;
-    textField.text = Texts.resource.getText("GENexitquery");
+    textField.text = Texts.resourceManager.getText("GENexitquery");
     textField.x = 47;
     textField.y = 150 - textField.textHeight/2;
     //textField.filters = [new GlowFilter(0x000000, 0.7, 3, 3)];    // ToDo
@@ -29,7 +29,7 @@ class ExitBox extends Sprite
 
     //---------------------
 
-    _timeGauge = new TimeGauge(7, Grafix.resource.getBitmapData("ExitGauge"), Gauge.DIRECTION_DOWN);
+    _timeGauge = new TimeGauge(7, Grafix.resourceManager.getBitmapData("ExitGauge"), Gauge.DIRECTION_DOWN);
     _timeGauge.x = 268;
     _timeGauge.y = 25;
     _timeGauge.addEventListener("TimeOver", _onTimeOver);
@@ -38,8 +38,8 @@ class ExitBox extends Sprite
     _timeGauge.addAlarm("TimeOver", 0);
     _timeGauge.start();
 
-    Bitmap exitYesButtonNormal = new Bitmap(Grafix.resource.getBitmapData("ExitYesButtonNormal"));
-    Bitmap exitYesButtonPressed = new Bitmap(Grafix.resource.getBitmapData("ExitYesButtonPressed"));
+    Bitmap exitYesButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ExitYesButtonNormal"));
+    Bitmap exitYesButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ExitYesButtonPressed"));
 
     _yesButton = new SimpleButton(exitYesButtonNormal, exitYesButtonNormal, exitYesButtonPressed, exitYesButtonPressed);
     _yesButton.x = 68;
@@ -47,8 +47,8 @@ class ExitBox extends Sprite
     _yesButton.addEventListener(MouseEvent.CLICK, _onYesButtonClicked);
     addChild(_yesButton);
 
-    Bitmap exitNoButtonNormal = new Bitmap(Grafix.resource.getBitmapData("ExitNoButtonNormal"));
-    Bitmap exitNoButtonPressed = new Bitmap(Grafix.resource.getBitmapData("ExitNoButtonPressed"));
+    Bitmap exitNoButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ExitNoButtonNormal"));
+    Bitmap exitNoButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ExitNoButtonPressed"));
 
     _noButton = new SimpleButton(exitNoButtonNormal, exitNoButtonNormal, exitNoButtonPressed, exitNoButtonPressed);
     _noButton.x = 173;

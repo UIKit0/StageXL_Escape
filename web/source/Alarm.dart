@@ -13,7 +13,7 @@ class Alarm extends Sprite
 
   Alarm()
   {
-    _warning = Sounds.resource.getSound("Warning");
+    _warning = Sounds.resourceManager.getSound("Warning");
     _warningChannel = null;
 
     _alarmBitmapDatas = Grafix.getAlarms();

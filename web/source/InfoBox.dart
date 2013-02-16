@@ -11,7 +11,7 @@ class InfoBox extends Sprite
 
   InfoBox()
   {
-    addChild(new Bitmap(Grafix.resource.getBitmapData("InfoBox")));
+    addChild(new Bitmap(Grafix.resourceManager.getBitmapData("InfoBox")));
 
     _levelText = new TextField();
     _levelText.defaultTextFormat = new TextFormat("Arial", 35, 0xFFFFFF, bold:true, align:TextFormatAlign.CENTER);

@@ -7,7 +7,7 @@ class MessageBox extends Sprite
 
   MessageBox(String text)
   {
-    Bitmap background = new Bitmap(Grafix.resource.getBitmapData("MessageBox"));
+    Bitmap background = new Bitmap(Grafix.resourceManager.getBitmapData("MessageBox"));
     addChild(background);
 
     TextField textField = new TextField();

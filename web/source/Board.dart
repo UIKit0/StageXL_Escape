@@ -369,7 +369,7 @@ class Board extends Sprite
       rebuild = clearCombinations() || (possibleCombinations() == false);
     }
 
-    Sound bonusUniversal = Sounds.resource.getSound("BonusUniversal");
+    Sound bonusUniversal = Sounds.resourceManager.getSound("BonusUniversal");
     bonusUniversal.play();
 
     ValueCounter completeCounter = new ValueCounter();
@@ -469,7 +469,7 @@ class Board extends Sprite
         field.empty = true;
         field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
 
-        Sound chainBlast = Sounds.resource.getSound("ChainBlast");
+        Sound chainBlast = Sounds.resourceManager.getSound("ChainBlast");
         chainBlast.play();
 
         Explosion explosion = new Explosion(field.color, field.direction);
@@ -586,7 +586,7 @@ class Board extends Sprite
     {
       boardEvent = new BoardEvent(BoardEvent.Unlocked, { "Type" : "SingleLocked", "Position" : new Point(lock.x + 20, lock.y) });
 
-      Sound unlock = Sounds.resource.getSound("Unlock");
+      Sound unlock = Sounds.resourceManager.getSound("Unlock");
       unlock.play();
     }
     else
@@ -608,7 +608,7 @@ class Board extends Sprite
 
     if (allUnlocked)
     {
-      Sound bonusAllUnlock = Sounds.resource.getSound("BonusAllUnlock");
+      Sound bonusAllUnlock = Sounds.resourceManager.getSound("BonusAllUnlock");
       bonusAllUnlock.play();
 
       for(int i = 0; i < _locks.length; i++)
@@ -750,7 +750,7 @@ class Board extends Sprite
 
       if (field.special == Special.Block)
       {
-        Sound chainError = Sounds.resource.getSound("ChainError");
+        Sound chainError = Sounds.resourceManager.getSound("ChainError");
         chainError.play();
         continue;
       }
@@ -777,7 +777,7 @@ class Board extends Sprite
       field.linked = false;
       field.linkedJoker = false;
 
-      Sound chainRotate = Sounds.resource.getSound("ChainRotate");
+      Sound chainRotate = Sounds.resourceManager.getSound("ChainRotate");
       chainRotate.play();
 
       if (field.canLinkHorizontal(fieldEast))
@@ -819,7 +819,7 @@ class Board extends Sprite
 
       if (playChainLink)
       {
-        Sound chainLink = Sounds.resource.getSound("ChainLink");
+        Sound chainLink = Sounds.resourceManager.getSound("ChainLink");
         chainLink.play();
       }
 
