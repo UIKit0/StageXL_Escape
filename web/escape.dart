@@ -3,7 +3,7 @@ library escape;
 import 'dart:async';
 import 'dart:math';
 import 'dart:html' as html;
-import 'package:dartflash/dartflash.dart';
+import 'package:stagexl/stagexl.dart';
 
 part 'source/Alarm.dart';
 part 'source/Board.dart';

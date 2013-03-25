@@ -1,10 +1,8 @@
-name: dartflash_escape
+name: stagexl_escape
 author: Bernhard Pichler
 description: This game was ported from Adobe Flash to HTML5 by using Dart and the dartflash library.
-homepage: http://www.dartflash.com/games/escape/escape.html
+homepage: http://www.stagexl.org/games/escape/escape.html
 dependencies:
-  dartflash:
-    git:
-      ref: latest
-      url: https://github.com/bp74/dartflash.git
   browser: any
+  stagexl:
+    git: https://github.com/bp74/StageXL.git
