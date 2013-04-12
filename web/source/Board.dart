@@ -566,8 +566,8 @@ class Board extends Sprite
       addChild(special);
 
       Tween tween = new Tween(special, 0.5, TransitionFunction.easeOutCubic);
-      tween.animate("x" , lock.x);
-      tween.animate("y" , lock.y - 10);
+      tween.animate.x.to(lock.x);
+      tween.animate.y.to(lock.y - 10);
       tween.onComplete = () => removeChild(special);
 
       renderJuggler.add(tween);

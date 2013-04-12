@@ -191,7 +191,7 @@ class Game extends Sprite
     _infoBox.y = -210;
 
     Tween tween = new Tween(_infoBox, 0.4, TransitionFunction.easeOutCubic);
-    tween.animate("y", -90);
+    tween.animate.y.to(-90);
 
     renderJuggler.add(tween);
 
@@ -338,7 +338,7 @@ class Game extends Sprite
     }, 2.5);
 
     Tween tween = new Tween(_infoBox, 0.5, TransitionFunction.easeOutCubic);
-    tween.animate("y", -210);
+    tween.animate.y.to(-210);
     tween.delay = 3.0;
 
     renderJuggler.add(tween);
@@ -382,8 +382,8 @@ class Game extends Sprite
         renderJuggler.delayCall(() => _nextLevel(), 0.5);
 
         Tween tween = new Tween(_infoBox, 0.5, TransitionFunction.easeOutCubic);
-        tween.animate("y", -210);
-
+        tween.animate.y.to(-210);
+        
         renderJuggler.add(tween);
       });
     }
@@ -402,7 +402,7 @@ class Game extends Sprite
         renderJuggler.delayCall(() => _gameOver(), 0.5);
 
         Tween tween = new Tween(_infoBox, 0.5, TransitionFunction.easeOutCubic);
-        tween.animate("y", -210);
+        tween.animate.y.to(-210);
 
         renderJuggler.add(tween);
       });
@@ -487,7 +487,7 @@ class Game extends Sprite
     renderJuggler.delayCall(() => laugh.play(), 0.3);
 
     Tween tween = new Tween(gameOverBox, 0.3, TransitionFunction.easeOutCubic);
-    tween.animate("y", 150);
+    tween.animate.y.to(150);
 
     renderJuggler.add(tween);
 

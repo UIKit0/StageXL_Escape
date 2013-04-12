@@ -73,13 +73,13 @@ class Grafix
       sprite.addChild(subSprite);
 
       Tween tween1 = new Tween(subSprite, 2.0, TransitionFunction.easeOutElastic);
-      tween1.animate("scaleX", 1.0);
-      tween1.animate("scaleY", 1.0);
+      tween1.animate.scaleX.to(1.0);
+      tween1.animate.scaleY.to(1.0);
       tween1.delay = i * 0.05;
 
       Tween tween2 = new Tween(subSprite, 0.4, TransitionFunction.linear);
-      tween2.animate("scaleX", 0.0);
-      tween2.animate("scaleY", 0.0);
+      tween2.animate.scaleX.to(0.0);
+      tween2.animate.scaleY.to(0.0);
       tween2.delay = 3.0;
 
       renderJuggler.add(tween1);
