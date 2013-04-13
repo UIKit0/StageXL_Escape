@@ -101,6 +101,7 @@ file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/animation/Transit
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/animation/Tween.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/Bitmap.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/BitmapData.dart
+file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/BitmapDataLoadOptions.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/BitmapDrawable.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/ButtonHelper.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/CapsStyle.dart
@@ -115,6 +116,7 @@ file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/JointStyl
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/Mask.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/MovieClip.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/PixelSnapping.dart
+file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/Shadow.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/Shape.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/SimpleButton.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/display/Sprite.dart
@@ -153,6 +155,7 @@ file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/geom/Rectangle.da
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/geom/Vector.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/media/Sound.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/media/SoundChannel.dart
+file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/media/SoundLoadOptions.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/media/SoundMixer.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/media/SoundTransform.dart
 file:///D:/GitHub/bp74/StageXL_Escape/web/packages/stagexl/src/media/implementation/AudioElementSound.dart
