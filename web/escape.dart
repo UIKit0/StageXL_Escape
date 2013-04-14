@@ -49,7 +49,7 @@ void main()
 
   //-------------------------------------------
 
-  BitmapData.defaultLoadOptions = new BitmapDataLoadOptions(png:true, jpg:true, webp:true);
+  BitmapData.defaultLoadOptions.webp = true;
 
   Future<BitmapData> loading = BitmapData.load("images/Loading.png");
 
