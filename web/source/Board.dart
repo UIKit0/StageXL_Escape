@@ -670,13 +670,9 @@ class Board extends Sprite
           }
           else
           {
-            if (_queue.length > 0)
-            {
-              fieldSource = _queue[0];
-              _queue.removeRange(0, 1);
-            }
-            else
-            {
+            if (_queue.length > 0) {
+              fieldSource = _queue.removeAt(0);
+            } else {
               fieldSource = new Field(_colors[_random.nextInt(_colors.length)], _random.nextInt(2));
             }
           }
@@ -734,8 +730,7 @@ class Board extends Sprite
   {
     while(_status == BoardStatus.Playing && _animationRunning == false && _mouseBuffer.length > 0)
     {
-      Point p = _mouseBuffer[0];
-      _mouseBuffer.removeRange(0, 1);
+      Point p = _mouseBuffer.removeAt(0);
 
       int x = p.x.toInt();
       int y = p.y.toInt();
