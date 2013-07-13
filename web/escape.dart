@@ -36,8 +36,8 @@ Bitmap loadingBitmap;
 Tween loadingBitmapTween;
 TextField loadingTextField;
 
-void main()
-{
+void main() {
+
   stageBackground = new Stage("StageBackground", html.query('#stageBackground'));
   stageForeground = new Stage("StageForeground", html.query('#stageForeground'));
 
@@ -53,8 +53,8 @@ void main()
 
   Future<BitmapData> loading = BitmapData.load("images/Loading.png");
 
-  loading.then((bitmapData)
-  {
+  loading.then((bitmapData) {
+
     loadingBitmap = new Bitmap(bitmapData);
     loadingBitmap.pivotX = 20;
     loadingBitmap.pivotY = 20;
@@ -80,9 +80,16 @@ void main()
   });
 }
 
-void loadGame()
-{
+void loadGame() {
+
   var resourceManager = new ResourceManager();
+
+  resourceManager.onProgress.listen((e) {
+    var finished = resourceManager.finishedResources;
+    var pending = resourceManager.pendingResources;
+    var failed = resourceManager.failedResources;
+    print("Resource Progress -> finished: ${finished.length}, pending:${pending.length}, failed:${failed.length}");
+  });
 
   resourceManager.addBitmapData("Background", "images/Background.jpg");
   resourceManager.addBitmapData("ExitBox", "images/ExitBox.png");
@@ -137,8 +144,8 @@ void loadGame()
   resourceManager.addText("GENtimeup", "Sorry! Your time is up.");
   resourceManager.addText("GENgameover", "Game Over");
 
-  resourceManager.load().then((res)
-  {
+  resourceManager.load().then((res) {
+
     stageForeground.removeChild(loadingBitmap);
     stageForeground.removeChild(loadingTextField);
     renderJuggler.remove(loadingBitmapTween);
@@ -157,7 +164,9 @@ void loadGame()
     stageForeground.addChild(game);
 
     game.start();
+
   }).catchError((error) {
+
     for(var resource in resourceManager.failedResources) {
       print("Loading resouce failed: ${resource.kind}.${resource.name} - ${resource.error}");
     }
