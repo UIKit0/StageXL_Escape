@@ -1,7 +1,10 @@
 part of escape;
 
-class Game extends Sprite
-{
+class Game extends Sprite {
+
+  ResourceManager _resourceManager;
+  Juggler _juggler;
+
   InfoBox _infoBox;
   SimpleButton _shuffleButton;
   SimpleButton _exitButton;
@@ -27,10 +30,13 @@ class Game extends Sprite
 
   //---------------------------------------------------------------------------------------------------
 
-  Game()
-  {
-    Bitmap shuffleButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ShuffleButtonNormal"));
-    Bitmap shuffleButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ShuffleButtonPressed"));
+  Game(ResourceManager resourceManager, Juggler juggler) {
+
+    _resourceManager = resourceManager;
+    _juggler = juggler;
+
+    Bitmap shuffleButtonNormal = new Bitmap(_resourceManager.getBitmapData("ShuffleButtonNormal"));
+    Bitmap shuffleButtonPressed = new Bitmap(_resourceManager.getBitmapData("ShuffleButtonPressed"));
 
     _shuffleButton = new SimpleButton(shuffleButtonNormal, shuffleButtonNormal, shuffleButtonPressed, shuffleButtonPressed);
     _shuffleButton.addEventListener(MouseEvent.CLICK, _onShuffleButtonClick);
@@ -38,8 +44,8 @@ class Game extends Sprite
     _shuffleButton.y = 525;
     addChild(_shuffleButton);
 
-    Bitmap exitButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ExitButtonNormal"));
-    Bitmap exitButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ExitButtonPressed"));
+    Bitmap exitButtonNormal = new Bitmap(_resourceManager.getBitmapData("ExitButtonNormal"));
+    Bitmap exitButtonPressed = new Bitmap(_resourceManager.getBitmapData("ExitButtonPressed"));
 
     _exitButton = new SimpleButton(exitButtonNormal, exitButtonNormal, exitButtonPressed, exitButtonPressed);
     _exitButton.addEventListener(MouseEvent.CLICK, _onExitButtonClick);
@@ -47,25 +53,25 @@ class Game extends Sprite
     _exitButton.y = 500;
     addChild(_exitButton);
 
-    _infoBox = new InfoBox();
+    _infoBox = new InfoBox(_resourceManager, _juggler);
     _infoBox.x = 540;
     _infoBox.y = -1000;
     addChild(_infoBox);
 
-    _timeGauge = new TimeGauge(10, Grafix.resourceManager.getBitmapData("TimeGauge"), Gauge.DIRECTION_UP);
+    _timeGauge = new TimeGauge(10, _resourceManager.getBitmapData("TimeGauge"), Gauge.DIRECTION_UP);
     _timeGauge.x = 659;
     _timeGauge.y = 244;
     _timeGauge.addEventListener("TimeShort", _onTimeShort);
     _timeGauge.addEventListener("TimeOver", _onTimeOver);
     addChild(_timeGauge);
-    renderJuggler.add(_timeGauge);
+    _juggler.add(_timeGauge);
 
-    _head = new Head();
+    _head = new Head(_resourceManager, _juggler);
     _head.x = 640;
     _head.y = 230;
     addChild(_head);
 
-    _alarm = new Alarm();
+    _alarm = new Alarm(_resourceManager, _juggler);
     _alarm.x = 665;
     _alarm.y = 160;
     addChild(_alarm);
@@ -113,33 +119,32 @@ class Game extends Sprite
 
     //-------------------------------
 
-    _introSound = Sounds.resourceManager.getSound("Intro");
+    _introSound = _resourceManager.getSound("Intro");
     _introSoundChannel = _introSound.play();
-
   }
 
   //---------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------
 
-  void start()
-  {
+  void start() {
+
     _level = 1;
     _lives = 1;
     _points = 0;
     _shuffles = 3;
 
-    MessageBox messageBox  = new MessageBox(Texts.resourceManager.getText("ESCStartText"));
+    MessageBox messageBox  = new MessageBox(_resourceManager, _juggler, _resourceManager.getText("ESCStartText"));
     _messageLayer.addChild(messageBox);
 
-    renderJuggler.delayCall(() => _head.nod(21), 1);
+    _juggler.delayCall(() => _head.nod(21), 1);
 
-    messageBox.show(() => renderJuggler.delayCall(() => _nextLevel(), 0.5));
+    messageBox.show(() => _juggler.delayCall(() => _nextLevel(), 0.5));
   }
 
   //---------------------------------------------------------------------------------------------------
 
-  void _nextLevel()
-  {
+  void _nextLevel() {
+
     if (_board != null && this.contains(_board))
       _gameLayer.removeChild(_board);
 
@@ -147,25 +152,23 @@ class Game extends Sprite
     int chainCount = 0;
     num time = 0;
 
-    switch(_level)
-    {
-      case 01: time = 50; _board = new Board(chainCount = 40, 3, 0, 0, 0, 0, [0,1,2]); break;
-      case 02: time = 45; _board = new Board(chainCount = 45, 3, 1, 0, 0, 0, [2,3,4]); break;
-      case 03: time = 40; _board = new Board(chainCount = 50, 4, 2, 2, 1, 0, [5,6,7]); break;
-      case 04: time = 35; _board = new Board(chainCount = 55, 4, 3, 3, 2, 0, [0,2,6]); break;
-      case 05: time = 30; _board = new Board(chainCount = 60, 5, 4, 4, 2, 1, [1,3,5]); break;
-      case 06: time = 34; _board = new Board(chainCount = 60, 5, 5, 5, 3, 2, [1,2,4,7]); break;
-      case 07: time = 33; _board = new Board(chainCount = 65, 5, 5, 6, 3, 2, [0,1,2,3]); break;
-      case 08: time = 32; _board = new Board(chainCount = 70, 5, 5, 6, 3, 2, [0,2,5,6]); break;
-      case 09: time = 31; _board = new Board(chainCount = 75, 5, 5, 6, 3, 2, [1,4,5,7]); break;
-      default: time = 30; _board = new Board(chainCount = 80 + (_level - 10) * 5, 5, 5, 6, 3, 2, [0,1,2,3]); break;
+    switch(_level) {
+      case 01: time = 50; _board = new Board(_resourceManager, _juggler, chainCount = 40, 3, 0, 0, 0, 0, [0,1,2]); break;
+      case 02: time = 45; _board = new Board(_resourceManager, _juggler, chainCount = 45, 3, 1, 0, 0, 0, [2,3,4]); break;
+      case 03: time = 40; _board = new Board(_resourceManager, _juggler, chainCount = 50, 4, 2, 2, 1, 0, [5,6,7]); break;
+      case 04: time = 35; _board = new Board(_resourceManager, _juggler, chainCount = 55, 4, 3, 3, 2, 0, [0,2,6]); break;
+      case 05: time = 30; _board = new Board(_resourceManager, _juggler, chainCount = 60, 5, 4, 4, 2, 1, [1,3,5]); break;
+      case 06: time = 34; _board = new Board(_resourceManager, _juggler, chainCount = 60, 5, 5, 5, 3, 2, [1,2,4,7]); break;
+      case 07: time = 33; _board = new Board(_resourceManager, _juggler, chainCount = 65, 5, 5, 6, 3, 2, [0,1,2,3]); break;
+      case 08: time = 32; _board = new Board(_resourceManager, _juggler, chainCount = 70, 5, 5, 6, 3, 2, [0,2,5,6]); break;
+      case 09: time = 31; _board = new Board(_resourceManager, _juggler, chainCount = 75, 5, 5, 6, 3, 2, [1,4,5,7]); break;
+      default: time = 30; _board = new Board(_resourceManager, _juggler, chainCount = 80 + (_level - 10) * 5, 5, 5, 6, 3, 2, [0,1,2,3]); break;
     }
 
     _chainCount = chainCount;
     //_logger.info(TextUtil.format("Level: {0}, Time: {1}, Chains: {2}", level, time, chainCount));
 
-    if (_shuffles < 3)
-    {
+    if (_shuffles < 3) {
       _shuffles++;
       _shufflesTextField.text = "${_shuffles}x";
     }
@@ -193,13 +196,15 @@ class Game extends Sprite
     Tween tween = new Tween(_infoBox, 0.4, TransitionFunction.easeOutCubic);
     tween.animate.y.to(-90);
 
-    renderJuggler.add(tween);
+    _juggler.add(tween);
 
-    MessageBox messageBox = new MessageBox(Texts.resourceManager.getText("ESCLevelBoxText").replaceAll("{0}", "$chainCount"));
+    MessageBox messageBox = new MessageBox(_resourceManager, _juggler,
+        _resourceManager.getText("ESCLevelBoxText").replaceAll("{0}", "$chainCount"));
+
     _messageLayer.addChild(messageBox);
 
-    messageBox.show(()
-    {
+    messageBox.show(() {
+
       _board.mouseEnabled = true;
       _timeGauge.start();
 
@@ -217,34 +222,30 @@ class Game extends Sprite
           _head.nodStop();
         };
 
-        renderJuggler.add(transition);
+        _juggler.add(transition);
         _introSound = null;
       }
     });
-
   }
 
   //---------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------
 
-  void _onTimeShort(Event e)
-  {
+  void _onTimeShort(Event e) {
     //_logger.info("onTimeShort");
     _alarm.start();
   }
 
   //---------------------------------------------------------------------------------------------------
 
-  void _onTimeOver(Event e)
-  {
+  void _onTimeOver(Event e) {
     // _logger.info("onTimeOver");
     _board.updateStatus(BoardStatus.Timeouting);
   }
 
   //---------------------------------------------------------------------------------------------------
 
-  void _onBoardEventUnlocked(BoardEvent be)
-  {
+  void _onBoardEventUnlocked(BoardEvent be) {
     // _logger.info(TextUtil.format("onBoardEventUnlocked ({0})", be.info.type));
 
     int unlockPoints = 0;
@@ -255,7 +256,7 @@ class Game extends Sprite
     if (type == "SingleUnlocked") unlockPoints = 1000;
     if (type == "All") unlockPoints = 10000;
 
-    Bonus bonus = new Bonus(unlockPoints);
+    Bonus bonus = new Bonus(_resourceManager, _juggler, unlockPoints);
     bonus.x = position.x;
     bonus.y = position.y;
     _gameLayer.addChild(bonus);
@@ -267,8 +268,7 @@ class Game extends Sprite
 
   //---------------------------------------------------------------------------------------------------
 
-  void _onBoardEventExplosion(BoardEvent be)
-  {
+  void _onBoardEventExplosion(BoardEvent be) {
     //_logger.info("onBoardEventExplosion");
 
     int chainCount = _chainCount;
@@ -287,8 +287,7 @@ class Game extends Sprite
 
     int chainPoints = 0;
 
-    switch(chainLength)
-    {
+    switch(chainLength) {
       case 3: chainPoints = 1000; break;
       case 4: chainPoints = 2000; break;
       case 5: chainPoints = 5000; break;
@@ -301,34 +300,31 @@ class Game extends Sprite
 
   //---------------------------------------------------------------------------------------------------
 
-  void _onBoardEventFinalized(BoardEvent be)
-  {
+  void _onBoardEventFinalized(BoardEvent be) {
    //_logger.info("onBoardEventFinalized");
 
     _timeGauge.pause();
     _alarm.stop();
 
-    Sound laugh = Sounds.resourceManager.getSound("Laugh");
-    Sound levelUp = Sounds.resourceManager.getSound("LevelUp");
+    Sound laugh = _resourceManager.getSound("Laugh");
+    Sound levelUp = _resourceManager.getSound("LevelUp");
 
     laugh.play();
     _head.nod(3);
 
-    Sprite levelUpAnimation = Grafix.getLevelUpAnimation();
+    Sprite levelUpAnimation = Grafix.getLevelUpAnimation(_resourceManager, _juggler);
     levelUpAnimation.x = 55;
     levelUpAnimation.y = 260;
     _gameLayer.addChild(levelUpAnimation);
 
-    renderJuggler.delayCall(()
-    {
+    _juggler.delayCall(() {
       _board.dropFields();
       levelUp.play();
     }, 2.0);
 
-    renderJuggler.delayCall(()
-    {
+    _juggler.delayCall(() {
       int timePoints = (_timeGauge.restTime * 1000).toInt();
-      Bonus timeBonus = new Bonus(timePoints);
+      Bonus timeBonus = new Bonus(_resourceManager, _juggler, timePoints);
       timeBonus.x = 704;
       timeBonus.y = 360;
       _gameLayer.addChild(timeBonus);
@@ -341,15 +337,13 @@ class Game extends Sprite
     tween.animate.y.to(-210);
     tween.delay = 3.0;
 
-    renderJuggler.add(tween);
+    _juggler.add(tween);
 
-    renderJuggler.delayCall(()
-    {
+    _juggler.delayCall(() {
       _gameLayer.removeChild(levelUpAnimation);
     }, 3.5);
 
-    renderJuggler.delayCall(()
-    {
+    _juggler.delayCall(() {
       _level++;
       _nextLevel();
     }, 4.0);
@@ -357,54 +351,49 @@ class Game extends Sprite
 
   //---------------------------------------------------------------------------------------------------
 
-  void _onBoardEventTimeouted(BoardEvent be)
-  {
+  void _onBoardEventTimeouted(BoardEvent be) {
+
     _alarm.stop();
     _board.dropFields();
 
     MessageBox messageBox;
-    Sound sound;
 
-    if (_lives > 0)
-    {
+    if (_lives > 0) {
+
       //_logger.info("onBoardEventTimeouted (SecondChance)");
 
       _lives--;
 
-      messageBox = new MessageBox(Texts.resourceManager.getText("GEN2ndchancetime"));
+      messageBox = new MessageBox(_resourceManager, _juggler, _resourceManager.getText("GEN2ndchancetime"));
       _messageLayer.addChild(messageBox);
+      _resourceManager.getSound("LevelUp").play();
 
-      sound = Sounds.resourceManager.getSound("LevelUp");
-      sound.play();
+      messageBox.show(() {
 
-      messageBox.show(()
-      {
-        renderJuggler.delayCall(() => _nextLevel(), 0.5);
+        _juggler.delayCall(() => _nextLevel(), 0.5);
 
         Tween tween = new Tween(_infoBox, 0.5, TransitionFunction.easeOutCubic);
         tween.animate.y.to(-210);
-        
-        renderJuggler.add(tween);
+
+        _juggler.add(tween);
       });
-    }
-    else
-    {
+
+    } else {
+
       // _logger.info("onBoardEventTimeouted (GameOver)");
 
-      messageBox = new MessageBox(Texts.resourceManager.getText("GENtimeup"));
+      messageBox = new MessageBox(_resourceManager, _juggler, _resourceManager.getText("GENtimeup"));
       _messageLayer.addChild(messageBox);
+      _resourceManager.getSound("GameOver").play();
 
-      sound = Sounds.resourceManager.getSound("GameOver");
-      sound.play();
+      messageBox.show(() {
 
-      messageBox.show(()
-      {
-        renderJuggler.delayCall(() => _gameOver(), 0.5);
+        _juggler.delayCall(() => _gameOver(), 0.5);
 
         Tween tween = new Tween(_infoBox, 0.5, TransitionFunction.easeOutCubic);
         tween.animate.y.to(-210);
 
-        renderJuggler.add(tween);
+        _juggler.add(tween);
       });
     }
   }
@@ -412,16 +401,14 @@ class Game extends Sprite
   //---------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------
 
-  void _onShuffleButtonClick(MouseEvent me)
-  {
+  void _onShuffleButtonClick(MouseEvent me) {
    //  _logger.info("onShuffleButtonClick");
 
-    if (_board != null && _shuffles > 0)
-    {
+    if (_board != null && _shuffles > 0) {
+
       bool shuffled = _board.shuffleField();
 
-      if (shuffled)
-      {
+      if (shuffled) {
         //_logger.info("shuffled");
 
         _shuffles = _shuffles - 1;
@@ -430,8 +417,7 @@ class Game extends Sprite
     }
   }
 
-  void _onExitButtonClick(MouseEvent me)
-  {
+  void _onExitButtonClick(MouseEvent me) {
     //_logger.info("onExitButtonClick");
 
     Sprite dark = new Sprite();
@@ -440,13 +426,12 @@ class Game extends Sprite
 
     _exitLayer.addChild(dark);
 
-    ExitBox exitBox = new ExitBox();
+    ExitBox exitBox = new ExitBox(_resourceManager, _juggler);
     exitBox.x = 235;
     exitBox.y = 150;
     _exitLayer.addChild(exitBox);
 
-    exitBox.show((bool exit)
-    {
+    exitBox.show((bool exit) {
       _exitLayer.removeChild(exitBox);
 
       if (exit == false)
@@ -459,11 +444,11 @@ class Game extends Sprite
   //---------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------
 
-  _gameOver()
-  {
+  _gameOver() {
+
     Sprite gameOverBox = new Sprite();
 
-    Bitmap background = new Bitmap(Grafix.resourceManager.getBitmapData("ExitBox"));
+    Bitmap background = new Bitmap(_resourceManager.getBitmapData("ExitBox"));
     gameOverBox.addChild(background);
 
     TextField textField = new TextField();
@@ -472,7 +457,7 @@ class Game extends Sprite
     textField.height = 200;
     textField.wordWrap = true;
     //textField.selectable = false;
-    textField.text = Texts.resourceManager.getText("GENgameover");
+    textField.text = _resourceManager.getText("GENgameover");
     textField.x = 47;
     textField.y = 30 + (textField.height - textField.textHeight)/2;
     //textField.filters = [new GlowFilter(0x000000, 0.7, 3, 3)];
@@ -481,19 +466,18 @@ class Game extends Sprite
 
     gameOverBox.x = 110;
     gameOverBox.y = -gameOverBox.height;
-    _messageLayer.addChild(gameOverBox);
 
-    Sound laugh = Sounds.resourceManager.getSound("Laugh");
-    renderJuggler.delayCall(() => laugh.play(), 0.3);
+    _messageLayer.addChild(gameOverBox);
+    _juggler.delayCall(() => _resourceManager.getSound("Laugh").play(), 0.3);
 
     Tween tween = new Tween(gameOverBox, 0.3, TransitionFunction.easeOutCubic);
     tween.animate.y.to(150);
 
-    renderJuggler.add(tween);
+    _juggler.add(tween);
 
     //----------------------------------------------
 
-    renderJuggler.delayCall(() => _exitGame(true), 5.0);
+    _juggler.delayCall(() => _exitGame(true), 5.0);
 
     gameOverBox.addEventListener(MouseEvent.CLICK, (MouseEvent me) => _exitGame(true));
   }
@@ -502,12 +486,10 @@ class Game extends Sprite
 
   bool _exitCalled = false;
 
-  void _exitGame(bool gameEnded)
-  {
+  void _exitGame(bool gameEnded) {
     _timeGauge.pause();
 
-    if (_exitCalled == false)
-    {
+    if (_exitCalled == false) {
       _exitCalled = true;
       //  GameApi.instance.exit(_points.intValue, gameEnded);
     }

@@ -1,16 +1,16 @@
 part of escape;
 
-class ExitBox extends Sprite
-{
+class ExitBox extends Sprite {
+
   TimeGauge _timeGauge;
   SimpleButton _yesButton;
   SimpleButton _noButton;
 
   Function _doneFunction;
 
-  ExitBox()
-  {
-    Bitmap background = new Bitmap(Grafix.resourceManager.getBitmapData("ExitBox"));
+  ExitBox(ResourceManager resourceManager, Juggler juggler) {
+
+    Bitmap background = new Bitmap(resourceManager.getBitmapData("ExitBox"));
     addChild(background);
 
     TextField textField = new TextField();
@@ -19,7 +19,7 @@ class ExitBox extends Sprite
     textField.height = 100;
     textField.wordWrap = true;
     //textField.selectable = false;
-    textField.text = Texts.resourceManager.getText("GENexitquery");
+    textField.text = resourceManager.getText("GENexitquery");
     textField.x = 47;
     textField.y = 150 - textField.textHeight/2;
     //textField.filters = [new GlowFilter(0x000000, 0.7, 3, 3)];    // ToDo
@@ -29,7 +29,7 @@ class ExitBox extends Sprite
 
     //---------------------
 
-    _timeGauge = new TimeGauge(7, Grafix.resourceManager.getBitmapData("ExitGauge"), Gauge.DIRECTION_DOWN);
+    _timeGauge = new TimeGauge(7, resourceManager.getBitmapData("ExitGauge"), Gauge.DIRECTION_DOWN);
     _timeGauge.x = 268;
     _timeGauge.y = 25;
     _timeGauge.addEventListener("TimeOver", _onTimeOver);
@@ -38,8 +38,8 @@ class ExitBox extends Sprite
     _timeGauge.addAlarm("TimeOver", 0);
     _timeGauge.start();
 
-    Bitmap exitYesButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ExitYesButtonNormal"));
-    Bitmap exitYesButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ExitYesButtonPressed"));
+    Bitmap exitYesButtonNormal = new Bitmap(resourceManager.getBitmapData("ExitYesButtonNormal"));
+    Bitmap exitYesButtonPressed = new Bitmap(resourceManager.getBitmapData("ExitYesButtonPressed"));
 
     _yesButton = new SimpleButton(exitYesButtonNormal, exitYesButtonNormal, exitYesButtonPressed, exitYesButtonPressed);
     _yesButton.x = 68;
@@ -47,8 +47,8 @@ class ExitBox extends Sprite
     _yesButton.addEventListener(MouseEvent.CLICK, _onYesButtonClicked);
     addChild(_yesButton);
 
-    Bitmap exitNoButtonNormal = new Bitmap(Grafix.resourceManager.getBitmapData("ExitNoButtonNormal"));
-    Bitmap exitNoButtonPressed = new Bitmap(Grafix.resourceManager.getBitmapData("ExitNoButtonPressed"));
+    Bitmap exitNoButtonNormal = new Bitmap(resourceManager.getBitmapData("ExitNoButtonNormal"));
+    Bitmap exitNoButtonPressed = new Bitmap(resourceManager.getBitmapData("ExitNoButtonPressed"));
 
     _noButton = new SimpleButton(exitNoButtonNormal, exitNoButtonNormal, exitNoButtonPressed, exitNoButtonPressed);
     _noButton.x = 173;
@@ -59,16 +59,14 @@ class ExitBox extends Sprite
 
     //---------------------
 
-    this.addEventListener(Event.ADDED_TO_STAGE, (e) => renderJuggler.add(_timeGauge));
-    this.addEventListener(Event.REMOVED_FROM_STAGE, (e) => renderJuggler.remove(_timeGauge));
+    this.addEventListener(Event.ADDED_TO_STAGE, (e) => juggler.add(_timeGauge));
+    this.addEventListener(Event.REMOVED_FROM_STAGE, (e) => juggler.remove(_timeGauge));
   }
 
   //-----------------------------------------------------------------------------------
 
-  void _onExit(bool exit)
-  {
-    if (_doneFunction != null)
-    {
+  void _onExit(bool exit) {
+    if (_doneFunction != null) {
       _doneFunction(exit);
       _doneFunction = null;
     }
@@ -76,25 +74,21 @@ class ExitBox extends Sprite
 
   //-----------------------------------------------------------------------------------
 
-  void _onYesButtonClicked(MouseEvent me)
-  {
+  void _onYesButtonClicked(MouseEvent me) {
     _onExit(true);
   }
 
-  void _onNoButtonClicked(MouseEvent me)
-  {
+  void _onNoButtonClicked(MouseEvent me) {
     _onExit(false);
   }
 
-  void _onTimeOver(Event e)
-  {
+  void _onTimeOver(Event e) {
     _onExit(false);
   }
 
   //-----------------------------------------------------------------------------------
 
-  show(Function doneFunction)
-  {
+  show(Function doneFunction) {
     _doneFunction = doneFunction;
   }
 

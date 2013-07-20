@@ -1,7 +1,10 @@
 part of escape;
 
-class Field
-{
+class Field {
+
+  ResourceManager _resourceManager;
+  Juggler _juggler;
+
   int _color;
   int _direction;
   String _special;
@@ -18,8 +21,10 @@ class Field
 
   //---------------------------------------------------------------------------------
 
-  Field(int color, int direction)
-  {
+  Field(ResourceManager resourceManager, Juggler juggler, int color, int direction){
+
+    _resourceManager = resourceManager;
+    _juggler = juggler;
     _color = color;
     _direction = direction;
     _special = Special.None;
@@ -57,8 +62,8 @@ class Field
 
   //---------------------------------------------------------------------------------
 
-  bool couldLink(Field field)
-  {
+  bool couldLink(Field field) {
+
     bool link =
         field != null &&
         (field.color == _color || field.special == Special.Joker || _special == Special.Joker) &&
@@ -67,8 +72,8 @@ class Field
     return link;
   }
 
-  bool canLinkHorizontal(Field field)
-  {
+  bool canLinkHorizontal(Field field) {
+
     bool link =
         field != null &&
         (field.color == _color || field.special == Special.Joker || _special == Special.Joker) &&
@@ -78,8 +83,8 @@ class Field
     return link;
   }
 
-  bool canLinkVertical(Field field)
-  {
+  bool canLinkVertical(Field field) {
+
    bool link =
        field != null &&
        (field.color == _color || field.special == Special.Joker || _special == Special.Joker) &&
@@ -93,8 +98,8 @@ class Field
 
   num get x => _x;
 
-  void set x(num value)
-  {
+  void set x(num value) {
+
     _x = value;
 
     if (_chainDisplayObject != null) _chainDisplayObject.x = value;
@@ -106,8 +111,8 @@ class Field
 
   num get y => _y;
 
-  void set y(num value)
-  {
+  void set y(num value){
+
    _y = value;
 
     if (_chainDisplayObject != null) _chainDisplayObject.y = value;
@@ -119,63 +124,56 @@ class Field
 
   num get sinScale => 0;
 
-  void set sinScale(num n)
-  {
-    if (_chainDisplayObject != null)
-    {
-      num s = 1 + 0.3 * sin(n * PI);
+  void set sinScale(num n) {
 
-      _chainDisplayObject.scaleX = s;
-      _chainDisplayObject.scaleY = s;
+    if (_chainDisplayObject != null) {
+      _chainDisplayObject.scaleX = _chainDisplayObject.scaleY = 1 + 0.3 * sin(n * PI);
     }
   }
 
   //---------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------
 
-  void updateDisplayObjects(Sprite chainLayer, Sprite linkLayer, Sprite specialLayer)
-  {
-    if (_chainDisplayObject != null)
-    {
+  void updateDisplayObjects(Sprite chainLayer, Sprite linkLayer, Sprite specialLayer) {
+
+    if (_chainDisplayObject != null) {
       _chainDisplayObject.parent.removeChild(_chainDisplayObject);
       _chainDisplayObject = null;
     }
 
-    if (_linkDisplayObject != null)
-    {
+    if (_linkDisplayObject != null) {
       _linkDisplayObject.parent.removeChild(_linkDisplayObject);
       _linkDisplayObject = null;
     }
 
-    if (_specialDisplayObject != null)
-    {
+    if (_specialDisplayObject != null) {
       _specialDisplayObject.parent.removeChild(_specialDisplayObject);
       _specialDisplayObject = null;
     }
 
-    if (empty == false)
-    {
+    if (empty == false) {
+
       //----------------------------------
       // chainLayer
 
       switch(_special)
       {
         case Special.Joker:
-          _chainDisplayObject = new SpecialJokerChain(_direction);
+          _chainDisplayObject = new SpecialJokerChain(_resourceManager, _juggler, _direction);
           _chainDisplayObject.x = _x;
           _chainDisplayObject.y = _y;
           chainLayer.addChild(_chainDisplayObject);
           break;
 
         case Special.Block:
-          _chainDisplayObject = Grafix.getSpecial(Special.Block);
+          _chainDisplayObject = Grafix.getSpecial(_resourceManager, Special.Block);
           _chainDisplayObject.x = _x;
           _chainDisplayObject.y = _y;
           chainLayer.addChild(_chainDisplayObject);
           break;
 
         default:
-          _chainDisplayObject = Grafix.getChain(_color, _direction);
+          _chainDisplayObject = Grafix.getChain(_resourceManager, _color, _direction);
           _chainDisplayObject.x = _x;
           _chainDisplayObject.y = _y;
           chainLayer.addChild(_chainDisplayObject);
@@ -185,9 +183,12 @@ class Field
       //----------------------------------
       // linkLayer
 
-      if (_linked)
-      {
-        _linkDisplayObject = _linkedJoker ? new SpecialJokerLink(_direction) : Grafix.getLink(_color, _direction);
+      if (_linked) {
+
+        _linkDisplayObject = _linkedJoker
+            ? new SpecialJokerLink(_resourceManager, _juggler, _direction)
+            : Grafix.getLink(_resourceManager, _color, _direction);
+
         _linkDisplayObject.x = _x + ((_direction == 0) ? 25 : 0);
         _linkDisplayObject.y = _y + ((_direction == 1) ? 25 : 0);
         linkLayer.addChild(_linkDisplayObject);
@@ -196,13 +197,13 @@ class Field
       //----------------------------------
       // specialLayer
 
-      switch(_special)
-      {
+      switch(_special) {
+
         case Special.None: break;
         case Special.Block: break;
         case Special.Joker: break;
         default:
-          _specialDisplayObject = new SpecialWobble(_special);
+          _specialDisplayObject = new SpecialWobble(_resourceManager, _juggler, _special);
           _specialDisplayObject.x = _x;
           _specialDisplayObject.y = _y;
           specialLayer.addChild(_specialDisplayObject);

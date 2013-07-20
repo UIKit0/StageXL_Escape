@@ -1,7 +1,7 @@
 part of escape;
 
-class InfoBox extends Sprite
-{
+class InfoBox extends Sprite {
+
   int _level;
   TextField _levelText;
 
@@ -9,9 +9,9 @@ class InfoBox extends Sprite
   TextField _chainsText;
   Sprite _chainsTextZoom;
 
-  InfoBox()
-  {
-    addChild(new Bitmap(Grafix.resourceManager.getBitmapData("InfoBox")));
+  InfoBox(ResourceManager resourceManager, Juggler juggler) {
+
+    addChild(new Bitmap(resourceManager.getBitmapData("InfoBox")));
 
     _levelText = new TextField();
     _levelText.defaultTextFormat = new TextFormat("Arial", 35, 0xFFFFFF, bold:true, align:TextFormatAlign.CENTER);
@@ -45,7 +45,7 @@ class InfoBox extends Sprite
 
     addChild(_chainsTextZoom);
 
-    Bitmap chain = Grafix.getChain(3, 0);
+    Bitmap chain = Grafix.getChain(resourceManager, 3, 0);
     chain.x = 110;
     chain.y = 171;
     chain.rotation = -2 * PI / 180;
@@ -53,14 +53,12 @@ class InfoBox extends Sprite
     addChild(chain);
   }
 
-  void set level(int value)
-  {
+  void set level(int value) {
     _level = value;
     _levelText.text = "Level $_level";
   }
 
-  void set chains(int value)
-  {
+  void set chains(int value) {
     _chains = value;
     _chainsText.text = "$_chains";
   }

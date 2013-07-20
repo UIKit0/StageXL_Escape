@@ -1,7 +1,6 @@
 part of escape;
 
-class ExplosionParticle
-{
+class ExplosionParticle {
   Bitmap bitmap;
   num startX;
   num startY;
@@ -10,29 +9,28 @@ class ExplosionParticle
   num rotation;
 }
 
-class Explosion extends Sprite implements Animatable
-{
+class Explosion extends Sprite implements Animatable {
+
   List<ExplosionParticle> _particles;
   num _currentTime;
 
-  Explosion(int color, int direction)
-  {
+  Explosion(ResourceManager resourceManager, Juggler juggler, int color, int direction) {
+
     _particles = new List<ExplosionParticle>();
     _currentTime = 0.0;
 
     this.mouseEnabled = false;
 
-    Bitmap chain = Grafix.getChain(color, direction);
+    Bitmap chain = Grafix.getChain(resourceManager, color, direction);
     Random random = new Random();
 
     num angle;
     num velocity;
     num rotatation;
 
-    for(int y = 0; y <= 1; y++)
-    {
-      for(int x = 0; x <= 1; x++)
-      {
+    for(int y = 0; y <= 1; y++) {
+      for(int x = 0; x <= 1; x++) {
+
         if (x == 0 && y == 0) { angle = PI * 1.15; rotation = - PI * 2; }
         if (x == 1 && y == 0) { angle = PI * 1.85; rotation = PI * 2; }
         if (x == 1 && y == 1) { angle = PI * 0.15; rotation = PI * 2; }
@@ -64,34 +62,33 @@ class Explosion extends Sprite implements Animatable
 
   //----------------------------------------------------------------------------------------------------------
 
-  bool advanceTime(num time)
-  {
+  bool advanceTime(num time) {
+
     _currentTime = min(0.8, _currentTime + time);
 
     num gravity = 981.0;
 
-    for(int i = 0; i < _particles.length; i++)
-    {
-      ExplosionParticle particle = _particles[i];
+    for(var particle in _particles) {
 
-      Bitmap bitmap = particle.bitmap;
-      num angle = particle.angle;
-      num velocity = particle.velocity;
-      num rotation = particle.rotation;
-
-      num posX = particle.startX + _currentTime * (cos(angle) * velocity);
-      num posY = particle.startY + _currentTime * (sin(angle) * velocity + _currentTime * gravity * 0.5);
+      var bitmap = particle.bitmap;
+      var angle = particle.angle;
+      var velocity = particle.velocity;
+      var rotation = particle.rotation;
+      var posX = particle.startX + _currentTime * (cos(angle) * velocity);
+      var posY = particle.startY + _currentTime * (sin(angle) * velocity + _currentTime * gravity * 0.5);
 
       bitmap.x = posX;
       bitmap.y = posY;
       bitmap.rotation = _currentTime * rotation;
     }
 
-    if (_currentTime >= 0.6)
+    if (_currentTime >= 0.6) {
       this.alpha = (0.8 - _currentTime) / 0.2;
+    }
 
-    if (_currentTime >= 0.8)
+    if (_currentTime >= 0.8) {
       this.removeFromParent();
+    }
 
     return (_currentTime < 0.8);
   }

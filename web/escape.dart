@@ -1,36 +1,11 @@
-library escape;
-
 import 'dart:async';
 import 'dart:math';
 import 'dart:html' as html;
 import 'package:stagexl/stagexl.dart';
+import '../lib/escape.dart';
 
-part 'source/Alarm.dart';
-part 'source/Board.dart';
-part 'source/BoardEvent.dart';
-part 'source/BoardStatus.dart';
-part 'source/Bonus.dart';
-part 'source/ExitBox.dart';
-part 'source/Explosion.dart';
-part 'source/Field.dart';
-part 'source/Game.dart';
-part 'source/Grafix.dart';
-part 'source/Head.dart';
-part 'source/InfoBox.dart';
-part 'source/Lock.dart';
-part 'source/MessageBox.dart';
-part 'source/Sounds.dart';
-part 'source/Special.dart';
-part 'source/SpecialJokerChain.dart';
-part 'source/SpecialJokerLink.dart';
-part 'source/SpecialWobble.dart';
-part 'source/Texts.dart';
-part 'source/ValueCounter.dart';
-
-Stage stageBackground;
-Stage stageForeground;
+Stage stage;
 RenderLoop renderLoop;
-Juggler renderJuggler;
 
 Bitmap loadingBitmap;
 Tween loadingBitmapTween;
@@ -38,33 +13,19 @@ TextField loadingTextField;
 
 void main() {
 
-  stageBackground = new Stage("StageBackground", html.query('#stageBackground'));
-  stageForeground = new Stage("StageForeground", html.query('#stageForeground'));
-
+  stage = new Stage("Stage", html.query('#stage'));
   renderLoop = new RenderLoop();
-  renderLoop.addStage(stageBackground);
-  renderLoop.addStage(stageForeground);
-
-  renderJuggler = renderLoop.juggler;
-
-  //-------------------------------------------
+  renderLoop.addStage(stage);
 
   BitmapData.defaultLoadOptions.webp = true;
-
-  Future<BitmapData> loading = BitmapData.load("images/Loading.png");
-
-  loading.then((bitmapData) {
+  BitmapData.load("images/Loading.png").then((bitmapData) {
 
     loadingBitmap = new Bitmap(bitmapData);
     loadingBitmap.pivotX = 20;
     loadingBitmap.pivotY = 20;
     loadingBitmap.x = 400;
     loadingBitmap.y = 270;
-    stageForeground.addChild(loadingBitmap);
-
-    loadingBitmapTween = new Tween(loadingBitmap, 100, TransitionFunction.linear);
-    loadingBitmapTween.animate.rotation.to(100.0 * 2.0 * PI);
-    renderJuggler.add(loadingBitmapTween);
+    stage.addChild(loadingBitmap);
 
     loadingTextField = new TextField();
     loadingTextField.defaultTextFormat = new TextFormat("Arial", 20, 0xA0A0A0, bold:true);;
@@ -74,22 +35,28 @@ void main() {
     loadingTextField.x = 400 - loadingTextField.textWidth / 2;
     loadingTextField.y = 320;
     loadingTextField.mouseEnabled = false;
-    stageForeground.addChild(loadingTextField);
+    stage.addChild(loadingTextField);
 
-    loadGame();
+    loadingBitmapTween = new Tween(loadingBitmap, 100, TransitionFunction.linear);
+    loadingBitmapTween.animate.rotation.to(100.0 * 2.0 * PI);
+    renderLoop.juggler.add(loadingBitmapTween);
+
+    loadResources();
   });
 }
 
-void loadGame() {
+void loadResources() {
 
   var resourceManager = new ResourceManager();
 
+  /*
   resourceManager.onProgress.listen((e) {
     var finished = resourceManager.finishedResources;
     var pending = resourceManager.pendingResources;
     var failed = resourceManager.failedResources;
     print("Resource Progress -> finished: ${finished.length}, pending:${pending.length}, failed:${failed.length}");
   });
+  */
 
   resourceManager.addBitmapData("Background", "images/Background.jpg");
   resourceManager.addBitmapData("ExitBox", "images/ExitBox.png");
@@ -146,24 +113,11 @@ void loadGame() {
 
   resourceManager.load().then((res) {
 
-    stageForeground.removeChild(loadingBitmap);
-    stageForeground.removeChild(loadingTextField);
-    renderJuggler.remove(loadingBitmapTween);
+    stage.removeChild(loadingBitmap);
+    stage.removeChild(loadingTextField);
+    renderLoop.juggler.remove(loadingBitmapTween);
 
-    //------------------------------
-
-    Grafix.resourceManager = resourceManager;
-    Sounds.resourceManager = resourceManager;
-    Texts.resourceManager = resourceManager;
-
-    Bitmap backgroundBitmap = new Bitmap(Grafix.resourceManager.getBitmapData("Background"));
-    stageBackground.addChild(backgroundBitmap);
-    stageBackground.renderMode = StageRenderMode.ONCE;
-
-    Game game = new Game();
-    stageForeground.addChild(game);
-
-    game.start();
+    stage.addChild(new Escape(resourceManager));
 
   }).catchError((error) {
 

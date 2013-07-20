@@ -1,13 +1,9 @@
 part of escape;
 
-class Grafix
-{
-  static ResourceManager resourceManager;
+class Grafix {
 
-  //--------------------------------------------------------------------------------------------
+  static Bitmap getChain(ResourceManager resourceManager, int color, int direction) {
 
-  static Bitmap getChain(int color, int direction)
-  {
     Bitmap bitmap = new Bitmap(resourceManager.getTextureAtlas("Elements").getBitmapData("Chain${color}${direction}"));
     bitmap.pivotX = 25;
     bitmap.pivotY = 25;
@@ -17,8 +13,8 @@ class Grafix
 
   //--------------------------------------------------------------------------------------------
 
-  static Bitmap getLink(int color, int direction)
-  {
+  static Bitmap getLink(ResourceManager resourceManager, int color, int direction) {
+
     Bitmap bitmap = new Bitmap(resourceManager.getTextureAtlas("Elements").getBitmapData("Link${color}${direction}"));
     bitmap.pivotX = 25;
     bitmap.pivotY = 25;
@@ -28,8 +24,8 @@ class Grafix
 
   //--------------------------------------------------------------------------------------------
 
-  static Bitmap getWhiteLink(int direction)
-  {
+  static Bitmap getWhiteLink(ResourceManager resourceManager, int direction){
+
     Bitmap bitmap = new Bitmap(resourceManager.getTextureAtlas("Elements").getBitmapData("Link8${direction}"));
     bitmap.pivotX = 25;
     bitmap.pivotY = 25;
@@ -39,8 +35,8 @@ class Grafix
 
   //--------------------------------------------------------------------------------------------
 
-  static Bitmap getSpecial(String special)
-  {
+  static Bitmap getSpecial(ResourceManager resourceManager, String special) {
+
     Bitmap bitmap = new Bitmap(resourceManager.getTextureAtlas("Elements").getBitmapData(special));
     bitmap.pivotX = 25;
     bitmap.pivotY = 25;
@@ -50,8 +46,8 @@ class Grafix
 
   //--------------------------------------------------------------------------------------------
 
-  static Sprite getLevelUpAnimation()
-  {
+  static Sprite getLevelUpAnimation(ResourceManager resourceManager, Juggler juggler) {
+
     Sprite sprite = new Sprite();
     num offset = 0;
 
@@ -82,8 +78,8 @@ class Grafix
       tween2.animate.scaleY.to(0.0);
       tween2.delay = 3.0;
 
-      renderJuggler.add(tween1);
-      renderJuggler.add(tween2);
+      juggler.add(tween1);
+      juggler.add(tween2);
 
       offset = offset + 5 + bitmap.width;
     }
@@ -93,8 +89,8 @@ class Grafix
 
   //--------------------------------------------------------------------------------------------
 
-  static List<BitmapData> getJokerChain(int direction)
-  {
+  static List<BitmapData> getJokerChain(ResourceManager resourceManager, int direction) {
+
     TextureAtlas textureAtlas = resourceManager.getTextureAtlas("Elements");
 
     List<BitmapData> tmp = new List<BitmapData>();
@@ -106,8 +102,8 @@ class Grafix
     return tmp;
   }
 
-  static List<BitmapData> getJokerLink(int direction)
-  {
+  static List<BitmapData> getJokerLink(ResourceManager resourceManager, int direction) {
+
     TextureAtlas textureAtlas = resourceManager.getTextureAtlas("Elements");
 
     List<BitmapData> tmp = new List<BitmapData>();
@@ -119,8 +115,8 @@ class Grafix
     return tmp;
   }
 
-  static List<BitmapData> getLock(int color)
-  {
+  static List<BitmapData> getLock(ResourceManager resourceManager, int color) {
+
     TextureAtlas textureAtlas = resourceManager.getTextureAtlas("Locks");
 
     List<BitmapData> tmp = new List<BitmapData>();
@@ -132,8 +128,8 @@ class Grafix
     return tmp;
   }
 
-  static List<BitmapData> getHeads()
-  {
+  static List<BitmapData> getHeads(ResourceManager resourceManager) {
+
     TextureAtlas textureAtlas = resourceManager.getTextureAtlas("Head");
 
     List<BitmapData> tmp = new List<BitmapData>();
@@ -145,8 +141,8 @@ class Grafix
     return tmp;
   }
 
-  static List<BitmapData> getAlarms()
-  {
+  static List<BitmapData> getAlarms(ResourceManager resourceManager) {
+
     TextureAtlas textureAtlas = resourceManager.getTextureAtlas("Alarm");
 
     List<BitmapData> tmp = new List<BitmapData>();

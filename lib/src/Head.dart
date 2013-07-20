@@ -1,7 +1,10 @@
 part of escape;
 
-class Head extends Sprite
-{
+class Head extends Sprite {
+
+  ResourceManager _resourceManager;
+  Juggler _juggler;
+
   List<BitmapData> _headBitmapDatas;
   Bitmap _headBitmap;
 
@@ -9,9 +12,11 @@ class Head extends Sprite
 
   //--------------------------------------------------------------------------------------------
 
-  Head()
-  {
-    _headBitmapDatas = Grafix.getHeads();
+  Head(ResourceManager resourceManager, Juggler juggler) {
+
+    _resourceManager = resourceManager;
+    _juggler = juggler;
+    _headBitmapDatas = Grafix.getHeads(_resourceManager);
 
     _headBitmap = new Bitmap(_headBitmapDatas[0]);
     _headBitmap.x = -_headBitmap.width / 2;
@@ -24,9 +29,9 @@ class Head extends Sprite
 
   //--------------------------------------------------------------------------------------------
 
-  void nod(int count)
-  {
-    renderJuggler.remove(_nodTransition);
+  void nod(int count) {
+
+    _juggler.remove(_nodTransition);
 
     _nodTransition = new Transition(0, count, 0.5 * count, TransitionFunction.linear);
 
@@ -36,12 +41,12 @@ class Head extends Sprite
       _headBitmap.y = sin(value * 2 * PI) * 3 - _headBitmap.height / 2;
     };
 
-    renderJuggler.add(_nodTransition);
+    _juggler.add(_nodTransition);
   }
 
-  void nodStop()
-  {
-    renderJuggler.remove(_nodTransition);
+  void nodStop() {
+
+    _juggler.remove(_nodTransition);
     _headBitmap.bitmapData = _headBitmapDatas[0];
   }
 

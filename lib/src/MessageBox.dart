@@ -2,12 +2,18 @@ part of escape;
 
 class MessageBox extends Sprite
 {
+  ResourceManager _resourceManager;
+  Juggler _juggler;
+
   DelayedCall _showTimeout;
   Function _doneFunction;
 
-  MessageBox(String text)
-  {
-    Bitmap background = new Bitmap(Grafix.resourceManager.getBitmapData("MessageBox"));
+  MessageBox(ResourceManager resourceManager, Juggler juggler, String text) {
+
+    _resourceManager = resourceManager;
+    _juggler = juggler;
+
+    Bitmap background = new Bitmap(_resourceManager.getBitmapData("MessageBox"));
     addChild(background);
 
     TextField textField = new TextField();
@@ -31,8 +37,8 @@ class MessageBox extends Sprite
   //----------------------------------------------------------------------
   //----------------------------------------------------------------------
 
-  void show(Function doneFunction)
-  {
+  void show(Function doneFunction) {
+
     this.parent.addChild(this);  // move to top
     this.x = - this.width;
     this.y = 150;
@@ -41,18 +47,18 @@ class MessageBox extends Sprite
 
     Tween tween = new Tween(this, 0.3, TransitionFunction.easeOutCubic);
     tween.animate.x.to(110);
-    tween.onComplete = () => _showTimeout = renderJuggler.delayCall(_hide, 10);
+    tween.onComplete = () => _showTimeout = _juggler.delayCall(_hide, 10);
 
-    renderJuggler.add(tween);
+    _juggler.add(tween);
   }
 
   //----------------------------------------------------------------------
 
-  void _hide()
-  {
-    if (_showTimeout != null)
-    {
-      renderJuggler.remove(_showTimeout);
+  void _hide() {
+
+    if (_showTimeout != null) {
+
+      _juggler.remove(_showTimeout);
       _showTimeout = null;
 
       _doneFunction();
@@ -61,14 +67,13 @@ class MessageBox extends Sprite
       tween.animate.x.to(800);
       tween.onComplete = () => this.parent.removeChild(this);
 
-      renderJuggler.add(tween);
+      _juggler.add(tween);
     }
   }
 
   //----------------------------------------------------------------------
 
-  void _onClick(MouseEvent me)
-  {
+  void _onClick(MouseEvent me) {
     _hide();
   }
 }

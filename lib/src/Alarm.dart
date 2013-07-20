@@ -1,7 +1,10 @@
 part of escape;
 
-class Alarm extends Sprite
-{
+class Alarm extends Sprite {
+
+  ResourceManager _resourceManager;
+  Juggler _juggler;
+
   List<BitmapData> _alarmBitmapDatas;
   Bitmap _alarmBitmap;
 
@@ -11,25 +14,26 @@ class Alarm extends Sprite
 
   //--------------------------------------------------------------------------------------------
 
-  Alarm()
-  {
-    _warning = Sounds.resourceManager.getSound("Warning");
-    _warningChannel = null;
+  Alarm(ResourceManager resourceManager, Juggler juggler) {
 
-    _alarmBitmapDatas = Grafix.getAlarms();
+    _resourceManager= resourceManager;
+    _juggler = juggler;
+
+    _alarmBitmapDatas = Grafix.getAlarms(_resourceManager);
     _alarmBitmap = new Bitmap(_alarmBitmapDatas[0]);
+
+    _warning = _resourceManager.getSound("Warning");
+    _warningChannel = null;
 
     addChild(_alarmBitmap);
   }
 
   //--------------------------------------------------------------------------------------------
 
-  void start()
-  {
+  void start() {
+
     _warningChannel = _warning.play();
-
-    renderJuggler.remove(_transition);
-
+    _juggler.remove(_transition);
     _transition = new Transition(0, 80, 9.0, TransitionFunction.linear);
 
     _transition.onUpdate = (value) {
@@ -37,18 +41,17 @@ class Alarm extends Sprite
       _alarmBitmap.bitmapData = _alarmBitmapDatas[(frame <= 4) ? frame + 1 : 8 - frame];
     };
 
-    renderJuggler.add(_transition);
+    _juggler.add(_transition);
   }
 
-  void stop()
-  {
-    if (_warningChannel != null)
-    {
+  void stop() {
+
+    if (_warningChannel != null) {
       _warningChannel.stop();
       _warningChannel = null;
     }
 
-    renderJuggler.remove(_transition);
+    _juggler.remove(_transition);
     _alarmBitmap.bitmapData = _alarmBitmapDatas[0];
   }
 

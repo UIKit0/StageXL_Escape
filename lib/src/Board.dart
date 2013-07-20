@@ -1,7 +1,7 @@
 part of escape;
 
-class Board extends Sprite
-{
+class Board extends Sprite {
+
                       // LEVEL |  1 |  2 |  3 |  4 |  5 |  6 |  7 | ++
                       //-------|------------------------------------------
   int _levelChains;   //       | 40 | 45 | 50 | 55 | 60 | 65 | 70 | ++5
@@ -13,6 +13,9 @@ class Board extends Sprite
   int _levelColors;   //       |  3 |  3 |  3 |  3 |  3 |  4 |  4 | ==
 
   //-------------------------------------------------------------------------------------------------
+
+  ResourceManager _resourceManager;
+  Juggler _juggler;
 
   Random _random;
   int _status;
@@ -33,8 +36,12 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  Board(int chains, int locks, int jokers, int blocks, int doubles, int quints, List<int> colors)
-  {
+  Board(ResourceManager resourceManager, Juggler juggler,
+      int chains, int locks, int jokers, int blocks, int doubles, int quints, List<int> colors) {
+
+    _resourceManager = resourceManager;
+    _juggler = juggler;
+
     _random = new Random();
     _status = BoardStatus.Playing;
     _colors = colors;
@@ -80,10 +87,9 @@ class Board extends Sprite
 
     this.mask = new Mask.rectangle(0.0, 0.0, 500.0, 500.0);
 
-    for(int x = 0; x < 10; x++)
-    {
-      for(int y = 0; y < 10; y++)
-      {
+    for(int x = 0; x < 10; x++) {
+      for(int y = 0; y < 10; y++) {
+
         Field field = _fields[x + y * 10];
         field.x = x * 50 + 25;
         field.y = y * 50 + 25 - 550;
@@ -105,7 +111,7 @@ class Board extends Sprite
           }
         };
 
-        renderJuggler.add(transition);
+        _juggler.add(transition);
       }
     }
 
@@ -117,13 +123,13 @@ class Board extends Sprite
   //-------------------------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------------------------
 
-  void updateStatus(int status)
-  {
-    if (status == BoardStatus.Finalizing)
-      _status = status;
+  void updateStatus(int status) {
 
-    if (status == BoardStatus.Timeouting && _status == BoardStatus.Playing)
-    {
+    if (status == BoardStatus.Finalizing) {
+      _status = status;
+    }
+
+    if (status == BoardStatus.Timeouting && _status == BoardStatus.Playing) {
        _status = status;
 
        if (_animationRunning == false)
@@ -133,14 +139,13 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  void dropFields()
-  {
+  void dropFields() {
+
     this.mask = new Mask.rectangle(0.0, 0.0, 500.0, 500.0);
 
-    for(int y = 0; y < 10; y++)
-    {
-      for(int x = 0; x < 10; x++)
-      {
+    for(int y = 0; y < 10; y++) {
+      for(int x = 0; x < 10; x++) {
+
         Field field = _fields[x + y * 10];
 
         field.linked = false;
@@ -155,7 +160,7 @@ class Board extends Sprite
           field.y = value;
         };
 
-        renderJuggler.add(transition);
+        _juggler.add(transition);
       }
     }
   }
@@ -163,13 +168,13 @@ class Board extends Sprite
   //-------------------------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------------------------
 
-  void initLocks()
-  {
+  void initLocks() {
+
     _locks = new List<Lock>();
 
-    for(int l = 0; l < _levelLocks; l++)
-    {
-      Lock lock = new Lock(l);
+    for(int l = 0; l < _levelLocks; l++) {
+
+      Lock lock = new Lock(_resourceManager, _juggler, l);
       lock.rotation = (_random.nextInt(30) - 15) * PI / 180;
       lock.x = 300 - (90 * _levelLocks) / 2 + l * 90 + _random.nextInt(20) - 10;
       lock.y = 550;
@@ -181,32 +186,26 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  int countLinks(int x, int y)
-  {
+  int countLinks(int x, int y) {
+
     int linkCount = 0;
     Field field = _fields[x + y * 10];
 
-    if (field.direction == 0)
-    {
+    if (field.direction == 0) {
+
       Field fieldWest = (x > 0) ? _fields[x - 1 + y * 10] : null;
       Field fieldEast = (x < 9) ? _fields[x + 1 + y * 10] : null;
 
-      if (field.canLinkHorizontal(fieldWest))
-        linkCount++;
+      if (field.canLinkHorizontal(fieldWest)) linkCount++;
+      if (field.canLinkHorizontal(fieldEast)) linkCount++;
 
-      if (field.canLinkHorizontal(fieldEast))
-        linkCount++;
-    }
-    else
-    {
+    } else {
+
       Field fieldNorth = (y > 0) ? _fields[x + (y - 1) * 10] : null;
       Field fieldSouth = (y < 9) ? _fields[x + (y + 1) * 10] : null;
 
-      if (field.canLinkVertical(fieldNorth))
-        linkCount++;
-
-      if (field.canLinkVertical(fieldSouth))
-        linkCount++;
+      if (field.canLinkVertical(fieldNorth)) linkCount++;
+      if (field.canLinkVertical(fieldSouth)) linkCount++;
     }
 
     return linkCount;
@@ -214,24 +213,22 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  bool clearCombinations()
-  {
-    for(int y = 0; y < 10; y++)
-    {
-      for(int x = 0; x < 10; x++)
-      {
+  bool clearCombinations() {
+
+    for(int y = 0; y < 10; y++) {
+      for(int x = 0; x < 10; x++) {
+
         Field field = _fields[x + y * 10];
         int retry = _levelColors * 2;
 
-        while (countLinks(x, y) == 2 && retry > 0)
-        {
-          if (retry % 2 == 0)
-          {
+        while (countLinks(x, y) == 2 && retry > 0) {
+
+          if (retry % 2 == 0) {
             field.direction = 1 - field.direction;
             retry--;
-          }
-          else
-          {
+
+          } else {
+
             int colorIndex = 0;
 
             for(int ci = 0; ci < _colors.length; ci++)
@@ -249,17 +246,19 @@ class Board extends Sprite
 
     bool rebuild = false;
 
-    for(int y = 0; y < 10; y++)
-      for(int x = 0; x < 10; x++)
+    for(int y = 0; y < 10; y++) {
+      for(int x = 0; x < 10; x++) {
         rebuild = rebuild || (countLinks(x, y) == 2);
+      }
+    }
 
     return rebuild;
   }
 
   //-------------------------------------------------------------------------------------------------
 
-  bool possibleCombinations()
-  {
+  bool possibleCombinations() {
+
     for(int y = 0; y < 10; y++)
       for(int x = 1; x < 9; x++)
         if (_fields[(x-1) + y*10].couldLink(_fields[x + y*10]) && _fields[x + y*10].couldLink(_fields[(x+1) + y*10]))
@@ -275,31 +274,30 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  void _initQueuePlaceSpecial(String special, int current, int maximum)
-  {
-    for(int retry = 0; retry < 20; retry++)
-    {
+  void _initQueuePlaceSpecial(String special, int current, int maximum) {
+
+    for(int retry = 0; retry < 20; retry++) {
+
       int range = _levelChains ~/ maximum;
       int index = current * range + _random.nextInt(range);
 
-      if (_queue[index].special == Special.None)
-      {
+      if (_queue[index].special == Special.None) {
         _queue[index].special = special;
         return;
       }
     }
   }
 
-  void initQueue()
-  {
+  void initQueue() {
+
     _queue = new List<Field>();
 
-    for(int i = 0; i < _levelChains; i++)
-    {
+    for(int i = 0; i < _levelChains; i++) {
+
       int color = _colors[_random.nextInt(_colors.length)];
       int direction = _random.nextInt(2);
 
-      _queue.add(new Field(color, direction));
+      _queue.add(new Field(_resourceManager, _juggler, color, direction));
     }
 
     for(int i = 0; i < _levelLocks * 2; i++)
@@ -320,22 +318,20 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  void initField()
-  {
+  void initField() {
+
     _fields = new List<Field>();
 
     bool rebuild = true;
 
-    while(rebuild)
-    {
+    while(rebuild) {
+
       _fields.clear();
 
-      for(int f = 0; f < 100; f++)
-      {
-       int color = _colors[_random.nextInt(_colors.length)];
-       int direction = _random.nextInt(2);
-
-        _fields.add(new Field(color, direction));
+      for(int f = 0; f < 100; f++) {
+        int color = _colors[_random.nextInt(_colors.length)];
+        int direction = _random.nextInt(2);
+        _fields.add(new Field(_resourceManager, _juggler, color, direction));
       }
 
       rebuild = clearCombinations();
@@ -344,8 +340,8 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  bool shuffleField()
-  {
+  bool shuffleField() {
+
     if (_animationRunning || _status != BoardStatus.Playing)
       return false;
 
@@ -353,10 +349,9 @@ class Board extends Sprite
 
     _animationRunning = true;
 
-    while (rebuild)
-    {
-      for(int f = 0; f < _fields.length; f++)
-      {
+    while (rebuild) {
+
+      for(int f = 0; f < _fields.length; f++) {
         Field field = _fields[f];
         field.linked = false;
         field.linkedJoker = false;
@@ -369,15 +364,13 @@ class Board extends Sprite
       rebuild = clearCombinations() || (possibleCombinations() == false);
     }
 
-    Sound bonusUniversal = Sounds.resourceManager.getSound("BonusUniversal");
-    bonusUniversal.play();
+    _resourceManager.getSound("BonusUniversal").play();
 
     ValueCounter completeCounter = new ValueCounter();
 
-    for(int x = 0; x < 10; x++)
-    {
-      for(int y = 0; y < 10; y++)
-      {
+    for(int x = 0; x < 10; x++) {
+      for(int y = 0; y < 10; y++) {
+
         Field field = _fields[x + y * 10];
         field.sinScale = 0.0;
 
@@ -400,7 +393,7 @@ class Board extends Sprite
           }
         };
 
-        renderJuggler.add(transition);
+        _juggler.add(transition);
       }
     }
 
@@ -409,12 +402,11 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  void _updateLinks()
-  {
-    for(int y = 0; y < 10; y++)
-    {
-      for(int x = 0; x < 10; x++)
-      {
+  void _updateLinks() {
+
+    for(int y = 0; y < 10; y++) {
+      for(int x = 0; x < 10; x++) {
+
         Field field = _fields[x + y * 10];
         Field fieldEast = (x < 9) ? _fields[x + 1 + y * 10] : null;
         Field fieldSouth = (y < 9) ? _fields[x + (y + 1) * 10] : null;
@@ -422,20 +414,17 @@ class Board extends Sprite
         bool linked = false;
         bool linkedJoker = false;
 
-        if (field.canLinkHorizontal(fieldEast))
-        {
+        if (field.canLinkHorizontal(fieldEast)) {
           linked = true;
           linkedJoker = (field.special == Special.Joker || fieldEast.special == Special.Joker);
         }
 
-        if (field.canLinkVertical(fieldSouth))
-        {
+        if (field.canLinkVertical(fieldSouth)) {
           linked = true;
           linkedJoker = (field.special == Special.Joker || fieldSouth.special == Special.Joker);
         }
 
-        if (field.linked != linked || field.linkedJoker != linkedJoker)
-        {
+        if (field.linked != linked || field.linkedJoker != linkedJoker) {
           field.linked = linked;
           field.linkedJoker = linkedJoker;
           field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
@@ -447,15 +436,15 @@ class Board extends Sprite
   //-------------------------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------------------------
 
-  void _processCombinationsExplosion(ValueCounter animationCounter, int x, int y, int length, int dx, int dy)
-  {
+  void _processCombinationsExplosion(ValueCounter animationCounter, int x, int y, int length, int dx, int dy) {
+
     _animationRunning = true;
     animationCounter.increment(length);
 
     int factor = 1;
 
-    for(int l = 0; l < length; l++)
-    {
+    for(int l = 0; l < length; l++) {
+
       Field field = _fields[x + l * dx + (y + l * dy) * 10];
 
       if (field.special == Special.Double) factor = factor * 2;
@@ -464,19 +453,18 @@ class Board extends Sprite
       int px = x + l * dx;
       int py = y + l * dy;
 
-      renderJuggler.delayCall(()
-      {
+      _juggler.delayCall(() {
+
         field.empty = true;
         field.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
 
-        Sound chainBlast = Sounds.resourceManager.getSound("ChainBlast");
-        chainBlast.play();
+        _resourceManager.getSound("ChainBlast").play();
 
-        Explosion explosion = new Explosion(field.color, field.direction);
+        Explosion explosion = new Explosion(_resourceManager, _juggler, field.color, field.direction);
         explosion.x = px * 50;
         explosion.y = py * 50;
 
-        renderJuggler.add(explosion);
+        _juggler.add(explosion);
         _explosionLayer.addChild(explosion);
 
         processSpecial(field);
@@ -492,18 +480,17 @@ class Board extends Sprite
     dispatchEvent(new BoardEvent(BoardEvent.Explosion, { "Length" : length, "Factor" : factor }));
   }
 
-  void _processCombinations()
-  {
+  void _processCombinations() {
+
     _animationRunning = false;
     ValueCounter animationCounter = new ValueCounter();
 
     //------------------------------------------------------------------------------
     // check horizontal positions
 
-    for(int y = 0; y < 10; y++)
-    {
-      for(int x = 0; x < 10; )
-      {
+    for(int y = 0; y < 10; y++) {
+      for(int x = 0; x < 10; ) {
+
         int length =  1;
 
         while(x + length < 10 && _fields[x + length - 1 + y * 10].canLinkHorizontal(_fields[x + length + y * 10]))
@@ -519,10 +506,9 @@ class Board extends Sprite
     //------------------------------------------------------------------------------
     // check vertical positions
 
-    for(int x = 0; x < 10; x++)
-    {
-      for(int y = 0; y < 10; )
-      {
+    for(int x = 0; x < 10; x++) {
+      for(int y = 0; y < 10; ) {
+
         int length =  1;
 
         while(y + length < 10 && _fields[x + (y + length - 1) * 10].canLinkVertical(_fields[x + (y + length) * 10]))
@@ -538,8 +524,8 @@ class Board extends Sprite
     //------------------------------------------------------------------------------
     // no explosions and finalizing or timeouting?
 
-    if (animationCounter.value == 0)
-    {
+    if (animationCounter.value == 0) {
+
       if (_status == BoardStatus.Finalizing)
         dispatchEvent(new BoardEvent(BoardEvent.Finalized, null));
 
@@ -553,14 +539,14 @@ class Board extends Sprite
 
   //-------------------------------------------------------------------------------------------------
 
-  void processSpecial(Field field)
-  {
-    if (field.special.indexOf("Lock") == 0)
-    {
+  void processSpecial(Field field) {
+
+    if (field.special.indexOf("Lock") == 0) {
+
       int lockNumber = int.parse(field.special.substring(4, 5)) - 1;
       Lock lock = _locks[lockNumber];
 
-      Bitmap special = Grafix.getSpecial(field.special);
+      Bitmap special = Grafix.getSpecial(_resourceManager, field.special);
       special.x = field.x;
       special.y = field.y;
       addChild(special);
@@ -570,27 +556,22 @@ class Board extends Sprite
       tween.animate.y.to(lock.y - 10);
       tween.onComplete = () => removeChild(special);
 
-      renderJuggler.add(tween);
-      renderJuggler.delayCall(() => openLock(lockNumber), 0.5);
+      _juggler.add(tween);
+      _juggler.delayCall(() => openLock(lockNumber), 0.5);
     }
   }
 
   //-------------------------------------------------------------------------------------------------
 
-  void openLock(int lockNumber)
-  {
+  void openLock(int lockNumber) {
+
     Lock lock = _locks[lockNumber];
     BoardEvent boardEvent;
 
-    if (lock.locked)
-    {
+    if (lock.locked) {
       boardEvent = new BoardEvent(BoardEvent.Unlocked, { "Type" : "SingleLocked", "Position" : new Point(lock.x + 20, lock.y) });
-
-      Sound unlock = Sounds.resourceManager.getSound("Unlock");
-      unlock.play();
-    }
-    else
-    {
+      _resourceManager.getSound("Unlock").play();
+    } else {
       boardEvent = new BoardEvent(BoardEvent.Unlocked, { "Type" : "SingleUnlocked", "Position" : new Point(lock.x + 20, lock.y) });
     }
 
@@ -603,62 +584,58 @@ class Board extends Sprite
 
     bool allUnlocked = true;
 
-    for(int i = 0; i < _locks.length; i++)
+    for(int i = 0; i < _locks.length; i++) {
       allUnlocked = allUnlocked && (_locks[i].locked == false);
+    }
 
-    if (allUnlocked)
-    {
-      Sound bonusAllUnlock = Sounds.resourceManager.getSound("BonusAllUnlock");
-      bonusAllUnlock.play();
+    if (allUnlocked) {
 
-      for(int i = 0; i < _locks.length; i++)
-      {
+      _resourceManager.getSound("BonusAllUnlock").play();
+
+      for(int i = 0; i < _locks.length; i++) {
         _locks[i].locked = true;
-        renderJuggler.delayCall(() => _locks[(i + lockNumber) % _locks.length].showHappy(), i * 0.2);
+        _juggler.delayCall(() => _locks[(i + lockNumber) % _locks.length].showHappy(), i * 0.2);
       }
 
-      renderJuggler.delayCall(() => dispatchEvent(new BoardEvent(BoardEvent.Unlocked, { "Type" : "All", "Position" : new Point(280, 550) })), 0.75);
+      _juggler.delayCall(() => dispatchEvent(new BoardEvent(BoardEvent.Unlocked, { "Type" : "All", "Position" : new Point(280, 550) })), 0.75);
     }
   }
 
   //-------------------------------------------------------------------------------------------------
 
-  void _fillEmptyFields()
-  {
+  void _fillEmptyFields() {
+
     ValueCounter animationCounter = new ValueCounter();
 
-    for(int x = 0; x < 10; x++)
-    {
+    for(int x = 0; x < 10; x++) {
+
       int target = 9;
       int source = 8;
 
-      while(target >= 0)
-      {
-        while (target >= 0 && _fields[x + target * 10].empty == false)
-        {
+      while(target >= 0) {
+
+        while (target >= 0 && _fields[x + target * 10].empty == false) {
           target--;
           source--;
         }
 
-        while (source >= 0 && _fields[x + source * 10].empty == true)
-        {
+        while (source >= 0 && _fields[x + source * 10].empty == true) {
           source--;
         }
 
-        if (target >= 0)
-        {
+        if (target >= 0) {
+
           Field fieldTarget, fieldSource, fieldSourceWest;
 
-          if (source >= 0)
-          {
+          if (source >= 0) {
+
             fieldSource = _fields[x + source * 10];
 
-            if (x > 0)
-            {
+            if (x > 0) {
+
               fieldSourceWest = _fields[x - 1 + source * 10];
 
-              if (fieldSource.canLinkHorizontal(fieldSourceWest))
-              {
+              if (fieldSource.canLinkHorizontal(fieldSourceWest)) {
                 fieldSourceWest.linked = false;
                 fieldSourceWest.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
               }
@@ -667,13 +644,15 @@ class Board extends Sprite
             fieldSource.linked = false;
             fieldSource.empty = true;
             fieldSource.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
-          }
-          else
-          {
+
+          } else {
+
             if (_queue.length > 0) {
               fieldSource = _queue.removeAt(0);
             } else {
-              fieldSource = new Field(_colors[_random.nextInt(_colors.length)], _random.nextInt(2));
+              var color = _colors[_random.nextInt(_colors.length)];
+              var direction = _random.nextInt(2);
+              fieldSource = new Field(_resourceManager, _juggler, color, direction);
             }
           }
 
@@ -703,7 +682,7 @@ class Board extends Sprite
             }
           };
 
-          renderJuggler.add(transition);
+          _juggler.add(transition);
         }
       }
     }
@@ -712,10 +691,10 @@ class Board extends Sprite
   //-------------------------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------------------------
 
-  void _onMouseDown(MouseEvent me)
-  {
-    if (me.target == _chainLayer && this.mouseEnabled)
-    {
+  void _onMouseDown(MouseEvent me) {
+
+    if (me.target == _chainLayer && this.mouseEnabled) {
+
       int x = min(me.localX / 50, 9).toInt();
       int y = min(me.localY / 50, 9).toInt();
 
@@ -726,10 +705,10 @@ class Board extends Sprite
     }
   }
 
-  void _checkMouseBuffer()
-  {
-    while(_status == BoardStatus.Playing && _animationRunning == false && _mouseBuffer.length > 0)
-    {
+  void _checkMouseBuffer() {
+
+    while(_status == BoardStatus.Playing && _animationRunning == false && _mouseBuffer.length > 0) {
+
       Point p = _mouseBuffer.removeAt(0);
 
       int x = p.x.toInt();
@@ -743,24 +722,20 @@ class Board extends Sprite
 
       bool playChainLink = false;
 
-      if (field.special == Special.Block)
-      {
-        Sound chainError = Sounds.resourceManager.getSound("ChainError");
-        chainError.play();
+      if (field.special == Special.Block) {
+        _resourceManager.getSound("ChainError").play();
         continue;
       }
 
       //--------------------------------------------
       // update links on North and West field
 
-      if (field.canLinkVertical(fieldNorth))
-      {
+      if (field.canLinkVertical(fieldNorth)) {
         fieldNorth.linked = false;
         fieldNorth.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
       }
 
-      if (field.canLinkHorizontal(fieldWest))
-      {
+      if (field.canLinkHorizontal(fieldWest)) {
         fieldWest.linked = false;
         fieldWest.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
       }
@@ -772,17 +747,14 @@ class Board extends Sprite
       field.linked = false;
       field.linkedJoker = false;
 
-      Sound chainRotate = Sounds.resourceManager.getSound("ChainRotate");
-      chainRotate.play();
+      _resourceManager.getSound("ChainRotate").play();
 
-      if (field.canLinkHorizontal(fieldEast))
-      {
+      if (field.canLinkHorizontal(fieldEast)) {
         field.linked = true;
         field.linkedJoker = (field.special == Special.Joker || fieldEast.special == Special.Joker);
       }
 
-      if (field.canLinkVertical(fieldSouth))
-      {
+      if (field.canLinkVertical(fieldSouth)) {
         field.linked = true;
         field.linkedJoker = (field.special == Special.Joker || fieldSouth.special == Special.Joker);
       }
@@ -794,16 +766,14 @@ class Board extends Sprite
       //--------------------------------------------
       // update links on North and West field
 
-      if (field.canLinkVertical(fieldNorth))
-      {
+      if (field.canLinkVertical(fieldNorth)) {
         fieldNorth.linked = true;
         fieldNorth.linkedJoker = (field.special == Special.Joker || fieldNorth.special == Special.Joker);
         fieldNorth.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
         playChainLink = true;
       }
 
-      if (field.canLinkHorizontal(fieldWest))
-      {
+      if (field.canLinkHorizontal(fieldWest)) {
         fieldWest.linked = true;
         fieldWest.linkedJoker = (field.special == Special.Joker || fieldWest.special == Special.Joker);
         fieldWest.updateDisplayObjects(_chainLayer, _linkLayer, _specialLayer);
@@ -812,10 +782,8 @@ class Board extends Sprite
 
       //--------------------------------------------
 
-      if (playChainLink)
-      {
-        Sound chainLink = Sounds.resourceManager.getSound("ChainLink");
-        chainLink.play();
+      if (playChainLink) {
+        _resourceManager.getSound("ChainLink").play();
       }
 
       //--------------------------------------------

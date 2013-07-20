@@ -1,11 +1,9 @@
 part of escape;
 
-class Bonus extends Sprite
-{
-  Sprite _textFieldContainer;
+class Bonus extends Sprite {
 
-  Bonus(int points)
-  {
+  Bonus(ResourceManager resourceManager, Juggler juggler, int points) {
+
     TextField textField = new TextField();
     textField.defaultTextFormat = new TextFormat("Arial", 30, 0xFFFFFF, bold:true, align:TextFormatAlign.CENTER);
     textField.width = 110;
@@ -20,26 +18,26 @@ class Bonus extends Sprite
     textField.x = - textField.width / 2;
     textField.y = - textField.height / 2;
 
-    _textFieldContainer = new Sprite();
-    _textFieldContainer.addChild(textField);
-    addChild(_textFieldContainer);
+    var textFieldContainer = new Sprite();
+    textFieldContainer.addChild(textField);
+    addChild(textFieldContainer);
 
     //-------------------------------------------------
 
     Transition transition = new Transition(0.0, 1.0, 1.5, TransitionFunction.easeOutCubic);
 
     transition.onUpdate = (value) {
-      _textFieldContainer.alpha = 1 - value;
-      _textFieldContainer.y = - value * 50;
-      _textFieldContainer.scaleX = 1.0 + 0.1 * sin(value * 10);
-      _textFieldContainer.scaleY = 1.0 + 0.1 * cos(value * 10);
+      textFieldContainer.alpha = 1 - value;
+      textFieldContainer.y = - value * 50;
+      textFieldContainer.scaleX = 1.0 + 0.1 * sin(value * 10);
+      textFieldContainer.scaleY = 1.0 + 0.1 * cos(value * 10);
     };
 
     transition.onComplete = () {
       this.removeFromParent();
     };
 
-    renderJuggler.add(transition);
+    juggler.add(transition);
   }
 
 }

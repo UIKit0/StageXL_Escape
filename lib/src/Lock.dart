@@ -1,16 +1,22 @@
 part of escape;
 
-class Lock extends Sprite
-{
+class Lock extends Sprite {
+
+  ResourceManager _resourceManager;
+  Juggler _juggler;
+
   int _color;
   Bitmap _bitmap;
   List<BitmapData> _lockBitmapDatas;
   bool _locked;
 
-  Lock(int color)
-  {
+  Lock(ResourceManager resourceManager, Juggler juggler, int color) {
+
+    _resourceManager = resourceManager;
+    _juggler = juggler;
+
     _color = color;
-    _lockBitmapDatas = Grafix.getLock(color);
+    _lockBitmapDatas = Grafix.getLock(_resourceManager, color);
     _locked = true;
 
     _bitmap = new Bitmap(_lockBitmapDatas[0]);
@@ -27,13 +33,12 @@ class Lock extends Sprite
 
   //-----------------------------------------------------------------
 
-  void showLocked(bool locked)
-  {
+  void showLocked(bool locked) {
     _bitmap.bitmapData = _lockBitmapDatas[locked ? 0 : 4];
   }
 
-  void showHappy()
-  {
+  void showHappy() {
+
     Transition transition = new Transition(0.0, 1.0, 2.0, TransitionFunction.easeOutCubic);
     transition.onUpdate = (value) {
       scaleX = scaleY = 1.0 + 0.2 * sin(value * 4 * PI);
@@ -48,9 +53,9 @@ class Lock extends Sprite
     tween2.animate.alpha.to(1);
     tween2.delay = 2.2;
 
-    renderJuggler.add(transition);
-    renderJuggler.add(tween1);
-    renderJuggler.add(tween2);
+    _juggler.add(transition);
+    _juggler.add(tween1);
+    _juggler.add(tween2);
   }
 
 }

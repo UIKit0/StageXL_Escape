@@ -1,7 +1,6 @@
 part of escape;
 
-class Special
-{
+class Special {
   static const String None = "None";
   static const String Lock1 = "Lock1";
   static const String Lock2 = "Lock2";
