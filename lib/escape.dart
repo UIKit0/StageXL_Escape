@@ -2,7 +2,6 @@ library escape;
 
 import 'dart:async';
 import 'dart:math';
-import 'dart:html' as html;
 import 'package:stagexl/stagexl.dart';
 
 part 'src/Alarm.dart';
